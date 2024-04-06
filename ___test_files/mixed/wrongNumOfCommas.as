@@ -12,8 +12,8 @@ bne ,L
 ;illegal comma before first operand at red
 red ,         r10
 M: .data 9,6, -33    ,55
-;illegal appearence of comma at stop
-stop , 
+;illegal appearence of comma at hlt
+hlt , 
 ;illegal appearence of comma after the last parameter at sub
 sub N[r14]     , O,
 ;illegal appearence of comma after the last parameter at jmp

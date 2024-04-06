@@ -15,14 +15,17 @@ unsigned getDC() { return DC; }
 unsigned getIC() { return IC; }
 unsigned getICF() { return ICF; }
 unsigned getDCF() { return DCF; }
+
 void increaseDataCounter(int amount)
 {
     DC += amount;
 }
+
 void increaseInstructionCounter(int amount)
 {
     IC += amount;
 }
+
 void allocMemoryImg()
 {
     const int totalSize = DCF - MEMORY_START;
@@ -57,6 +60,7 @@ void resetMemoryCounters()
     ICF = 0;
     DCF = 0;
 }
+
 void printBinaryImg()
 {
     int i;
@@ -67,6 +71,7 @@ void printBinaryImg()
         printWordBinary(i);
     }
 }
+
 void addWord(int value, DataType type)
 {
     if (type == Code)
@@ -74,16 +79,19 @@ void addWord(int value, DataType type)
     else if (type == Data)
         addWordToDataImage(numToBin(value));
 }
+
 void addWordToDataImage(char *s)
 {
     wordStringToWordObj(s, Data);
     DC++;
 }
+
 void addWordToCodeImage(char *s)
 {
     wordStringToWordObj(s, Code);
     IC++;
 }
+
 void wordStringToWordObj(char *s, DataType type)
 {
     int j;

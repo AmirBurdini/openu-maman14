@@ -1,17 +1,17 @@
 #include "constants.h"
 
-/*Bit is is a special variable that we made to build with BinaryWord*/
+/*variable used to build a BinaryWord*/
 typedef struct
 {
     unsigned int on : 1;
 } Bit;
-/*BinaryWord is a struct for holding memory and data image in memory format*/
+/*holds memory and data image in memory format*/
 typedef struct
 {
     Bit digit[BINARY_WORD_SIZE];
 } BinaryWord;
 
-/*Like BinaryWord, it represent a word with 5 hexa decimal characters in the order we will output to th .ob file*/
+/*represents a word with 5 hexadecimal characters in printing order for .ob file*/
 typedef struct
 {
     unsigned int _A : 4;
@@ -21,9 +21,8 @@ typedef struct
     unsigned int _E : 4;
 } HexWord;
 
-/*AddrMethodsOptions is a struct for addressing mehod, each member represent operand addressing method
-and the value can be 0 or 1 and the meaning is to  tell us if the addressing method is legal/optional
-For each operation's operand that we have in our assembly language.
+/*represents the addressing mehod detailed in the docs. 
+legal values are (0-3)
 */
 typedef struct
 {
@@ -33,12 +32,12 @@ typedef struct
     unsigned int reg : 1;
 } AddrMethodsOptions;
 
-/*Operation is a struct for holding all the operation table data*/
+/*represent a full detailed operation table data*/
 typedef struct
 {
     unsigned int op;        /*op- is the binary value of the first sixteen bits in the first word for each operation*/
     unsigned int funct : 4; /*the function code of the operation*/
-    char keyword[4];        /*the keyword for the operation name*/
+    char keyword[3];        /*the keyword for the operation name*/
     AddrMethodsOptions src; /*legal addressing mehods for the source operand*/
     AddrMethodsOptions des; /*legal addressing mehods for the destination operand*/
 } Operation;

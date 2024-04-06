@@ -45,7 +45,7 @@ Bool isRegistery(char *s)
 {
     int len = strlen(s);
     int i = 0;
-    if (s[0] == 'r' && len >= 2)
+    if (s[0] == 'r' && len == 2)
     {
         while (i < REGS_SIZE)
         {

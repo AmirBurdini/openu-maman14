@@ -15,8 +15,8 @@ clr Y, Z
 ;to many operands for prn
 A: prn #4, #-68
 .entry Z
-;to many operands for stop
-stop r9
+;to many operands for hlt
+hlt r9
 ;to many operands for rts
 rts #7, #-2
 .entry A

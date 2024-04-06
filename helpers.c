@@ -9,12 +9,14 @@ char *cloneString(char *s)
     strcpy(copy, s);
     return copy;
 }
+
 char *trimFromLeft(char *s)
 {
     while (isspace(*s) && *s != '\0')
         s++;
     return s;
 }
+
 char *decToHex(int num)
 {
     int i = num, size = 0;
@@ -25,11 +27,12 @@ char *decToHex(int num)
     sprintf(hex, "%05x", num);
     return hex;
 }
+
 char *numToBin(int num)
 {
     int i = 0;
     unsigned int result;
-    char *word, hex[6];
+    char *word, hex[5];
     word = (char *)calloc(BINARY_WORD_SIZE + 1, sizeof(char *));
     if (num < 0)
     {
@@ -110,6 +113,7 @@ char *numToBin(int num)
     strcat(word, "\0");
     return word;
 }
+
 HexWord *convertBinaryWordToHex(BinaryWord *word)
 {
     int i = 0;
@@ -147,6 +151,7 @@ HexWord *convertBinaryWordToHex(BinaryWord *word)
 
     return newHex;
 }
+
 unsigned binaryStringToHexNumber(char binaryStr[4])
 {
 
