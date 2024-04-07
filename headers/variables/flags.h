@@ -52,8 +52,8 @@ typedef enum
     closingQuotesForStringIsMissing,
     fileCouldNotBeOpened,
     wrongRegisteryReferenceUndefinedReg,
-    requiredSourceOperandIsMissin,
-    requiredDestinationOperandIsMissin,
+    requiredSourceOperandIsMissing,
+    requiredDestinationOperandIsMissing,
     srcOperandTypeIsNotAllowed,
     desOperandTypeIsNotAllowed,
     operandTypeDoNotMatch,
@@ -91,7 +91,7 @@ typedef enum
 typedef enum
 {
     assemblyCodeFailedToCompile,
-    startProgram,
+    programStart,
     parsingMacros,
     firstRun,
     secondRun,

@@ -1,6 +1,6 @@
 #include "data.h"
 
-static State globalState = startProgram;
+static State globalState = programStart;
 static char *path;
 static unsigned currentLineNumber = 1;
 
