@@ -1,6 +1,12 @@
 #include "data.h"
 static void (*currentLineNumberPlusPlus)() = &increaseCurrentLineNumber;
 static void (*resetCurrentLineCounter)() = &resetCurrentLineNumber;
+
+/* @ Function: countAndVerifyDataArguments(char *line)
+   @ Arguments: char *line - the operation's name.
+   @ Description: checks if the operation name is valid.
+   @ Returns: returns true if the operation name is valid, false otherwise.
+*/
 Bool countAndVerifyDataArguments(char *line)
 {
     Bool isValid = True;
@@ -9,7 +15,7 @@ Bool countAndVerifyDataArguments(char *line)
     char args[MAX_LINE_LEN + 1] = {0}, *p;
     line = strstr(line, DATA) + strlen(DATA);
 
-    /* we make the pointer p to point on the position of the first character coming sfter the .data
+    /*pointer p points to the first char's position coming after the .data
      instruction within the full line, so that p will point on the begining of the arguments string*/
 
     /*copies the string of arguments pointer by p into the args local string we will use for parsing*/
@@ -249,6 +255,7 @@ Bool handleSingleLine(char *line)
     (*currentLineNumberPlusPlus)();
     return result;
 }
+
 void parseAssemblyCode(FILE *src)
 {
     State (*globalState)() = &getGlobalState;

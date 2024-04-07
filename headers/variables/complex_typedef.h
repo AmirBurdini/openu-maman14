@@ -4,7 +4,8 @@
 typedef struct
 {
     unsigned int on : 1;
-} Bit;
+} Bit;\
+
 /*holds memory and data image in memory format*/
 typedef struct
 {
@@ -22,8 +23,7 @@ typedef struct
 } HexWord;
 
 /*represents the addressing mehod detailed in the docs. 
-legal values are (0-3)
-*/
+  legal values are (0-3). */
 typedef struct
 {
     unsigned int immediate : 1;
@@ -49,7 +49,7 @@ typedef enum
     Symbol
 } ItemType;
 /*DataType is an identyfier parameter that we use in the memory.c file functions in order to specify if a current memory word belongs to the data
-image part or the instruction part of the resulted image*/
+  image part or the instruction part of the resulted image*/
 typedef enum
 {
     Code,
@@ -57,7 +57,7 @@ typedef enum
 } DataType;
 
 /* MacroData is a struct that holds the additional unique data fields of each macro item in the macros hash table. The start member represents the starting index of the content of the macro in the source (.as) files
- The end member is the same as start, but for the ending of the macro content*/
+   The end member is the same as start, but for the ending of the macro content*/
 typedef struct
 {
     int start;
@@ -65,7 +65,6 @@ typedef struct
 } MacroData;
 
 /* ExtPositionData is the nested singly linked list element in the ExtListItem that we just mentioned above.*/
-
 typedef struct ExtPositionData
 {
     unsigned base;
@@ -95,11 +94,11 @@ typedef struct
 } Attributes;
 
 /*SymbolData is a struct that holds the additional unique data fields in the symbols hash table.
- The value member represents the  value of the memory address that the symbol appearse in.
-The base and offset members represent the same address but in format that splits the memory address to
-base address and offset address.
-The attrs member is holding the type of the symbol (data, entry, external, code).
- */
+  The value member represents the  value of the memory address that the symbol appearse in.
+  The base and offset members represent the same address but in format that splits the memory address to
+  base address and offset address.
+  The attrs member is holding the type of the symbol (data, entry, external, code).
+*/
 typedef struct
 {
 

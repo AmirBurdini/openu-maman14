@@ -44,9 +44,9 @@ Bool handleOperation(char *operationName, char *args)
 
     return areOperandsLegal;
 }
+
 Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions active[2])
 {
-
     int expectedOperandsCount = 0;
     int operandsPassedCount = 0;
     Bool isValid = True;
@@ -102,6 +102,7 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions
 
     return isValid;
 }
+
 Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions active[2], char *operand, int type)
 {
     Bool isAny = isValidImmediateParamter(operand) || isValidIndexParameter(operand) || isRegistery(operand) || verifyLabelNaming(operand) || isIndexParameter(operand);
@@ -196,6 +197,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
 
     return False;
 }
+
 Bool handleLabel(char *labelName, char *nextToken, char *line)
 {
     Bool isValid = True;
