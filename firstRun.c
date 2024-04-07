@@ -124,10 +124,10 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
     {
         if (type == _TYPE_DATA)
         {
-            return countAndVerifyDataArguments(line) ? True : False;
+            return verifyDataArguments(line) ? True : False;
         }
         else if (type == _TYPE_STRING)
-            return countAndVerifyStringArguments(line) ? True : False;
+            return verifyStringArguments(line) ? True : False;
 
         if (type == _TYPE_ENTRY || type == _TYPE_EXTERNAL)
         {
@@ -166,7 +166,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
         if (!isLabelNameAvailable)
             yieldError(illegalSymbolNameAlreadyInUse);
 
-        if (((type == _TYPE_DATA && countAndVerifyDataArguments(line)) || (type == _TYPE_STRING && countAndVerifyStringArguments(line))) && isLabelNameAvailable)
+        if (((type == _TYPE_DATA && verifyDataArguments(line)) || (type == _TYPE_STRING && verifyStringArguments(line))) && isLabelNameAvailable)
         {
 
             return addSymbol(firstToken, dataCounter, 0, 1, 0, 0) ? True : False;

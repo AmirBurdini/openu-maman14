@@ -4,12 +4,12 @@ const char *regs[REGS_SIZE] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
 
 Bool isMacroOpening(char *s)
 {
-    return !strcmp(s, "macro") ? True : False;
+    return !strcmp(s, "mer") ? True : False;
 }
 
 Bool isMacroClosing(char *s)
 {
-    return !strcmp(s, "endm") ? True : False;
+    return !strcmp(s, "endmer") ? True : False;
 }
 
 Bool isPossiblyUseOfMacro(char *s)
@@ -24,13 +24,8 @@ Bool isLegalMacroName(char *s)
 
 Bool isInstruction(char *s)
 {
-
-    if ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL)))
-        return True;
-
-    else if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
+    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
     {
-        /*         yieldError(missinSpaceAfterInstruction); */
         return True;
     }
     else

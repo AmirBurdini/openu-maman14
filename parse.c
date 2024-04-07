@@ -2,12 +2,12 @@
 static void (*currentLineNumberPlusPlus)() = &increaseCurrentLineNumber;
 static void (*resetCurrentLineCounter)() = &resetCurrentLineNumber;
 
-/* @ Function: countAndVerifyDataArguments(char *line)
+/* @ Function: verifyDataArguments(char *line)
    @ Arguments: char *line - the operation's name.
    @ Description: checks if the operation name is valid.
    @ Returns: returns true if the operation name is valid, false otherwise.
 */
-Bool countAndVerifyDataArguments(char *line)
+Bool verifyDataArguments(char *line)
 {
     Bool isValid = True;
     int size = 0, n = 0, num = 0;
@@ -114,7 +114,7 @@ Bool verifyCommaSyntax(char *line)
     return isValid;
 }
 
-Bool countAndVerifyStringArguments(char *line)
+Bool verifyStringArguments(char *line)
 {
     char *args, *closing = 0, *opening = 0;
     int size = 0;
