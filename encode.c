@@ -39,28 +39,47 @@ void processLine(char *line) {
     }
 }
 
-int main() {
-    FILE *inputFile = fopen("input.txt", "r");
-    FILE *outputFile = fopen("output.txt", "w");
-    char line[100]; /* Assuming each line has a maximum length of 100 characters*/
+FILE *convertFile(const char *inputFileName) {
 
-    if (inputFile == NULL || outputFile == NULL) {
-        printf("Error: Unable to open file.\n");
-        return 1;
+    FILE *inputFile = fopen(inputFileName, "r");
+    FILE *outputFile = fopen("output.txt", "w");
+    char line[100];
+
+    if (inputFile == NULL) {
+        printf("Error: Unable to open input file.\n");
+        return NULL;
     }
 
-    fgets(line, sizeof(line), inputFile); /* Read the first line (header) and write to output file */
+    if (outputFile == NULL) {
+        printf("Error: Unable to create output file.\n");
+        fclose(inputFile);
+        fclose(outputFile);
+        return NULL;
+    }
+
+    fgets(line, sizeof(line), inputFile); 
     fprintf(outputFile, "%s", line);
 
     while (fgets(line, sizeof(line), inputFile)) {
-        processLine(line); /* Process each line */
-        fprintf(outputFile, "%s\n", line); /* Write the modified line to output file */
+        processLine(line); 
+        fprintf(outputFile, "%s\n", line); 
     }
 
     fclose(inputFile);
     fclose(outputFile);
 
-    printf("Conversion successful.\n");
+    return outputFile; 
+}
+
+int main() {
+
+    FILE *outputFileName = convertFile("input.txt");
+
+    if (outputFileName != NULL) {
+        printf("Conversion successful.\n");
+    } else {
+        printf("Error: Conversion failed.\n");
+    }
 
     return 0;
 }
