@@ -12,7 +12,7 @@ Bool countAndVerifyDataArguments(char *line)
     /* we make the pointer p to point on the position of the first character coming sfter the .data
      instruction within the full line, so that p will point on the begining of the arguments string*/
 
-    /*copies the string of arguments pointer by p into the args local string we will use for parsing*/
+    /*copies the string of arguments pointer by p into the args local string we will use for parsing.*/
     strcpy(args, line);
 
     isValid = verifyCommaSyntax(args);

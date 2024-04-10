@@ -57,7 +57,7 @@ Bool parseLine(char *token, char *line);
 
 /* @ Function:handleSingleLine
    @ Arguments: This function gets char *line which is the current line that is being parsed.
-   @ Description: The function checks what is the current globalState, and by that decides how to split the line into tokens (what is the delimeter).
+   @ Description: The function checks what is the current globalState, and by that decides how to split the line into tokens (what is the delimeter). 
    Than the function calls the function parseLine in order to check if there are errors in the line.
    Than its increases by 1 the number of line it parses (for the next line to come).
    Returns true if the line is valid and false if it isn't.
