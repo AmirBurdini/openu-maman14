@@ -11,21 +11,13 @@ typedef struct
     Bit digit[BINARY_WORD_SIZE];
 } BinaryWord;
 
-/*represents a word with 5 hexadecimal characters in printing order for .ob file*/
-typedef struct
-{
-    unsigned int _A : 4;
-    unsigned int _B : 4;
-    unsigned int _C : 4;
-    unsigned int _D : 4;
-    unsigned int _E : 4;
-} HexWord;
 
-/*represents the addressing mehod detailed in the docs. 
+/*represents the addressing method detailed in the docs. 
 legal values are (0-3)
 */
 typedef struct
 {
+    // Amir change to 2 bits in all files !!!
     unsigned int immediate : 1;
     unsigned int direct : 1;
     unsigned int index : 1;
@@ -36,7 +28,6 @@ typedef struct
 typedef struct
 {
     unsigned int op;        /*op- is the binary value of the first sixteen bits in the first word for each operation*/
-    unsigned int funct : 4; /*the function code of the operation*/
     char keyword[3];        /*the keyword for the operation name*/
     AddrMethodsOptions src; /*legal addressing mehods for the source operand*/
     AddrMethodsOptions des; /*legal addressing mehods for the destination operand*/

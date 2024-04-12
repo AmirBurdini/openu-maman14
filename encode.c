@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+//GERMAN : add headers to  encode
+
 /* Function to convert a base-4 digit to the corresponding sign */
 char base4ToSign(char digit) {
     switch (digit) {
@@ -71,6 +73,7 @@ FILE *convertFile(const char *inputFileName) {
     return outputFile; 
 }
 
+/*
 int main() {
 
     FILE *outputFileName = convertFile("input.txt");
@@ -83,3 +86,4 @@ int main() {
 
     return 0;
 }
+*/

@@ -57,7 +57,6 @@ void writeMemoryImageToObFile(FILE *fp);
    The function doesn't return any value.
 */
 
-void printMemoryImgInRequiredObjFileFormat();
 void calcFinalAddrsCountersValues();
 void printWordBinary(unsigned index);
 void addWordToCodeImage(char *s);

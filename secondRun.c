@@ -1,8 +1,11 @@
 #include "data.h"
 
 void writeAdditionalOperandsWords(const Operation *op, AddrMethodsOptions active, char *value);
+
 Bool writeOperationBinary(char *operationName, char *args)
 {
+    // Amir : rewrite
+
     const Operation *op = getOperationByName(operationName);
     char *first, *second;
     AddrMethodsOptions active[2] = {{0, 0, 0, 0}, {0, 0, 0, 0}};
@@ -12,7 +15,6 @@ Bool writeOperationBinary(char *operationName, char *args)
 
     if (first && second && (detectOperandType(first, active, 0) && detectOperandType(second, active, 1)))
     {
-
         writeSecondWord(first, second, active, op);
         writeAdditionalOperandsWords(op, active[0], first);
         writeAdditionalOperandsWords(op, active[1], second);
@@ -23,7 +25,7 @@ Bool writeOperationBinary(char *operationName, char *args)
         writeSecondWord(first, second, active, op);
         writeAdditionalOperandsWords(op, active[1], second);
     }
-    else if (!first && !second && !op->funct)
+    else if (!first && !second)
         return True;
 
     else
@@ -88,7 +90,7 @@ void writeSecondWord(char *first, char *second, AddrMethodsOptions active[2], co
 
 void writeFirstWord(const Operation *op)
 {
-    unsigned firstWord = (A << 16) | op->op;
+    unsigned firstWord = (A << 10) | op->op;
     addWord(firstWord, Code);
 }
 
@@ -122,7 +124,7 @@ void writeImmediateOperandWord(char *n)
 
 Bool detectOperandType(char *operand, AddrMethodsOptions active[2], int type)
 {
-
+    // Amir : change the addrss type
     if (isRegistery(operand))
         active[type].reg = 1;
     else if (isValidImmediateParamter(operand))
