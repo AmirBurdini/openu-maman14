@@ -12,8 +12,8 @@
 
 /* Masks for creation of to binary word memory image */
 #define A 00
-#define R 01
-#define E 10
+#define R 10
+#define E 01
 #define IMMEDIATE_ADDR 00
 #define DIRECT_ADDR 01
 #define INDEX_ADDR 10
