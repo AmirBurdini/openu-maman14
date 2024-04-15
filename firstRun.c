@@ -3,7 +3,6 @@
 Bool handleOperation(char *operationName, char *args)
 {
     const Operation *p = getOperationByName(operationName);
-    // binaryImg[i].digit[j].on = 0;
     AddressMethodsEncoding active[2] = {{0,0}, {0, 0}};
     char *first = 0;
     char *second = 0;

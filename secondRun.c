@@ -5,8 +5,6 @@ void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding ac
 //Refactor needed
 Bool writeOperationBinary(char *operationName, char *args)
 {
-    // Amir : rewrite
-
     const Operation *op = getOperationByName(operationName);
     char *first, *second;
     AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
@@ -124,11 +122,9 @@ void writeImmediateOperandWord(char *n)
     }
 }
 
-//Refactor needed
 Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type)
 {
     AddressMethod method = convertBinaryToAddressMethod(active[type]);
-    // Amir : change the addrss type
     if (isRegistery(operand))
         method.reg = True;
     else if (isValidImmediateParamter(operand))
