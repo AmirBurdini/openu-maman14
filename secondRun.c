@@ -2,6 +2,7 @@
 
 void writeAdditionalOperandsWords(const Operation *op, AddrMethodsOptions active, char *value);
 
+//Refactor needed
 Bool writeOperationBinary(char *operationName, char *args)
 {
     // Amir : rewrite
@@ -54,12 +55,13 @@ Bool writeDataInstruction(char *token)
     while (token != NULL)
     {
         num = atoi(token);
-        addWord((A << 16) | num, Data);
+        addWord((A) | num, Data);
         token = strtok(NULL, ", \t\n\f\r");
     }
     return True;
 }
 
+//Refactor needed
 Bool writeStringInstruction(char *s)
 {
     char *start = strchr(s, '\"');
@@ -73,9 +75,10 @@ Bool writeStringInstruction(char *s)
     return True;
 }
 
+//Refactor needed
 void writeSecondWord(char *first, char *second, AddrMethodsOptions active[2], const Operation *op)
 {
-    unsigned secondWord = (A << 16) | (op->funct << 12);
+    unsigned secondWord = (A << 16) | (op->op << 12);
     if (first && (active[0].reg || active[0].index))
         secondWord = secondWord | (active[0].reg ? (getRegisteryNumber(first) << 8) : (parseRegNumberFromIndexAddrOperand(first) << 8)) | (active[0].reg ? (REGISTER_DIRECT_ADDR << 6) : (INDEX_ADDR << 6));
     else if (first && (active[0].direct || active[0].immediate))
@@ -97,31 +100,27 @@ void writeFirstWord(const Operation *op)
 void writeDirectOperandWord(char *labelName)
 {
 
-    unsigned base = 0, offset = 0;
     if (isExternal(labelName))
     {
-        base = getIC();
-        addWord((E << 16) | 0, Code);
-        offset = getIC();
-        addWord((E << 16) | 0, Code);
-        updateExtPositionData(labelName, base, offset);
+        addWord((E), Code);
+        updateExtPositionData(labelName);
     }
 
     else
     {
-        base = getSymbolBaseAddress(labelName);
-        offset = getSymbolOffset(labelName);
-        addWord((R << 16) | base, Code);
-        addWord((R << 16) | offset, Code);
+        addWord((R), Code);
     }
 }
 
 void writeImmediateOperandWord(char *n)
 {
     n++;
-    addWord((A << 16) | atoi(n), Code);
+    if ((*n & A) == 0) {
+    addWord((A) | atoi(n), Code);
+    }
 }
 
+//Refactor needed
 Bool detectOperandType(char *operand, AddrMethodsOptions active[2], int type)
 {
     // Amir : change the addrss type
