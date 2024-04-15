@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-//GERMAN : add headers to  encode
 
 /* Function to convert a base-4 digit to the corresponding sign */
 char base4ToSign(char digit) {

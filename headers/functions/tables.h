@@ -100,7 +100,7 @@ int printMacroItem(Item *item);
 
 ExtListItem *findExtOpListItem(char *name);
 void resetExtList();
-void updateExtPositionData(char *name, unsigned base, unsigned offset);
+void updateExtPositionData(char *name);
 void addExtListItem(char *name);
 void writeExternalsToFile(FILE *fp);
 void writeSingleExternal(FILE *fp, char *name, unsigned base, unsigned offset, ExtPositionData *next);

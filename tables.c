@@ -12,7 +12,7 @@ void findAllExternals();
 void addExtListItem(char *name);
 void resetExtList();
 ExtListItem *findExtOpListItem(char *name);
-void updateExtPositionData(char *name, unsigned base, unsigned offset);
+void updateExtPositionData(char *name);
 void freeTableItem(Item *item);
 void freeTablesMemory();
 ExtListItem *findExtOpListItem(char *name)
@@ -63,16 +63,10 @@ void updateExtPositionData(char *name, unsigned base, unsigned offset)
     if (np->value.base)
     {
         ExtPositionData *new = (ExtPositionData *)malloc(sizeof(ExtPositionData));
-        new->base = base;
-        new->offset = offset;
         new->next = np->value.next;
         np->value.next = new;
     }
-    else
-    {
-        np->value.base = base;
-        np->value.offset = offset;
-    }
+
 
     externalCount++;
 }
