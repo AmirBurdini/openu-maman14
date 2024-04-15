@@ -17,17 +17,6 @@ char *trimFromLeft(char *s)
     return s;
 }
 
-char *decToHex(int num)
-{
-    int i = num, size = 0;
-    char *hex;
-    for (size = 0; i > 0; i = i / 16)
-        size++;
-    hex = (char *)calloc(size, sizeof(char *));
-    sprintf(hex, "%05x", num);
-    return hex;
-}
-
 char *numToBin(int num)
 {
     int i = 0;
@@ -113,8 +102,6 @@ char *numToBin(int num)
     strcat(word, "\0");
     return word;
 }
-
-
 
 unsigned binaryStringToHexNumber(char binaryStr[4])
 {

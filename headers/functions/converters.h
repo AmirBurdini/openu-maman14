@@ -2,12 +2,12 @@
 /*
 ##########################################################################################################
 ##########################################################################################################
-#################################### helpers.c/h General Overview: ########################################
+#################################### converters.c/h General Overview: ########################################
 ##########################################################################################################
 ##########################################################################################################
 
 this file containing some helper functions that are used in other files for doing simple and independent small
-tasks like cloning a string, trimming white space, and also it contains helpers functions that are used for
+tasks like cloning a string, trimming white space, and also it contains converters functions that are used for
 encoding numeric values in binary(2's complement)/hex string.
 
 ##########################################################################################################
@@ -31,6 +31,6 @@ char *cloneString(char *s);
 */
 char *trimFromLeft(char *s);
 
-char *decToHex(int num);
 char *numToBin(int num);
+
 unsigned binaryStringToHexNumber(char binaryStr[4]);

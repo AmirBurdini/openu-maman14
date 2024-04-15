@@ -6,7 +6,7 @@
 ##########################################################################################################
 ##########################################################################################################
 
-Utils.c files contains most of all helpers functions that are used for verifying and checking and
+Utils.c files contains most of all converters functions that are used for verifying and checking and
 validating tokens identity, funtion here are mainly used out side of this file by other functions that deals
 with parsing the assembly code.
 
@@ -147,3 +147,5 @@ Bool verifyLabelNamingAndPrintErrors(char *s);
    @ Description: The function makes sure the name of the label is valid, by checking things like its length, if it is equal to an operation...
    If it finds an error it yields (prints) it and returns false, else returns true.
 */
+
+AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method);

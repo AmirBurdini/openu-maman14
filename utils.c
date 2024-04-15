@@ -257,3 +257,29 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
 
     return True;
 }
+
+AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {
+    
+    int decimal = 1 *method.firstDigit + 2 *method.secondDigit;
+    AddressMethod result = {False, False, False, False};
+
+    switch (decimal)
+    {
+    case 0:
+        result.immediate = True;
+        break;
+    case 1:
+        result.direct = True;
+        break;
+    case 2:
+        result.index = True;
+        break;
+    case 3:
+        result.reg = True;
+        break;
+    default:
+        break;
+    }
+
+    return result;
+}

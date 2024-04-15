@@ -3,7 +3,8 @@
 Bool handleOperation(char *operationName, char *args)
 {
     const Operation *p = getOperationByName(operationName);
-    AddrMethodsOptions active[2] = {{0, 0, 0, 0}, {0, 0, 0, 0}};
+    // binaryImg[i].digit[j].on = 0;
+    AddressMethodsEncoding active[2] = {{0,0}, {0, 0}};
     char *first = 0;
     char *second = 0;
     char *extra = 0;
@@ -30,22 +31,26 @@ Bool handleOperation(char *operationName, char *args)
     if (areOperandsLegal)
     {
         int size = 2;
-        if (active[0].immediate || active[1].immediate)
+        AddressMethod firstMethod = convertBinaryToAddressMethod(active[0]);
+        AddressMethod secondMethod = convertBinaryToAddressMethod(active[1]);
+
+        if (firstMethod.immediate || secondMethod.immediate)
             size++;
-        if ((active[0].direct || active[0].index) || (active[1].direct || active[1].index))
+        if (firstMethod.direct || firstMethod.index || secondMethod.direct || secondMethod.index)
             size += 2;
-        if ((!active[0].direct && !active[0].immediate && !active[0].index && !active[0].reg) && (!active[1].direct && !active[1].immediate && !active[1].index && !active[1].reg))
+        if (!firstMethod.immediate && !firstMethod.direct && !firstMethod.index && !firstMethod.reg && 
+            !secondMethod.immediate && !secondMethod.direct && !secondMethod.index && !secondMethod.reg)
             size = 1;
 
-        active[0].direct = active[0].immediate = active[0].index = active[0].reg = 0;
-        active[1].direct = active[1].immediate = active[1].index = active[1].reg = 0;
+        active[0].firstDigit = active[0].secondDigit = 0;
+        active[1].firstDigit = active[1].secondDigit = 0;
         increaseInstructionCounter(size);
     }
 
     return areOperandsLegal;
 }
 
-Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions active[2])
+Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEncoding active[2])
 {
     int expectedOperandsCount = 0;
     int operandsPassedCount = 0;
@@ -69,7 +74,7 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions
     if (expectedOperandsCount == 0)
         return True;
 
-    if (expectedOperandsCount == 1)
+    if (expectedOperandsCount.direct)
     {
         des = src;
         src = 0;
@@ -87,7 +92,7 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions
     return isValid;
 }
 
-Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions active[2], char *operand, int type)
+Bool validateOperandMatch(AddressMethod allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type)
 {
     Bool isAny = isValidImmediateParamter(operand) || isValidIndexParameter(operand) || isRegistery(operand) || verifyLabelNaming(operand) || isIndexParameter(operand);
     Bool isImmediate = isValidImmediateParamter(operand);
@@ -110,10 +115,19 @@ Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions ac
     else if (!allowedAddrs.index && isDirectIndex)
         return type == 1 ? yieldError(desOperandTypeIsNotAllowed) : yieldError(srcOperandTypeIsNotAllowed);
 
-    active[type].direct = isDirect;
-    active[type].reg = isReg;
-    active[type].immediate = isImmediate;
-    active[type].index = isDirectIndex;
+    if (isImmediate) {
+        active->firstDigit = 0;
+        active->secondDigit = 0;
+    } else if (isDirect) {
+        active->firstDigit = 1;
+        active->secondDigit = 0;
+    } else if (isDirectIndex) {
+        active->firstDigit = 0;
+        active->secondDigit = 1;
+    } else {
+        active->firstDigit = 1;
+        active->secondDigit = 1;
+    }
 
     return True;
 }

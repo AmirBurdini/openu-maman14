@@ -26,9 +26,9 @@ Bool writeOperationBinary(char *operationName, char *args);
    If there is an operand which is an undifined labl at the table of symbols, it returns false. Else it returns true.
 */
 
-void writeAdditionalOperandsWords(const Operation *op, AddrMethodsOptions active, char *value);
+void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding active, char *value);
 /* @ Function: writeAdditionalOperandsWords
-   @ Arguments: The function gets const Operation *op- the operation, AddrMethodsOptions active- the allowed addresing methods for the operands,
+   @ Arguments: The function gets const Operation *op- the operation, AddressMethodsEncoding active- the allowed addresing methods for the operands,
    and char * value- the operand which is about to be written in the memory.
    @ Description: The functiom checks the addressing method of the operations, then acording to the addressing method it writes value (the operand) in the memory.
     The function doesn't return value.
@@ -49,10 +49,10 @@ Bool writeStringInstruction(char *s);
    The function returns true.
 */
 
-void writeSecondWord(char *first, char *second, AddrMethodsOptions active[2], const Operation *op);
+void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2], const Operation *op);
 /* @ Function: writeSecondWord
    @ Arguments: The function gets char *first and char *second - the first and second operands of the operation- const Operation *op.
-   It also gets AddrMethodsOptions active[2]- an array with the allowed addresing methods for the operands.
+   It also gets AddressMethodsEncoding active[2]- an array with the allowed addresing methods for the operands.
    @ Description: The function builds and writes in the memory the second word of each operation and its parameters, it checks what is the addressing method of first and second, what is the funct of the operation.
     The function doesn't return value.
 */
@@ -78,9 +78,9 @@ void writeImmediateOperandWord(char *n);
    The function doesn't return value.
 */
 
-Bool detectOperandType(char *operand, AddrMethodsOptions active[2], int type);
+Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type);
 /* @ Function: detectOperandType
-   @ Arguments: The function gets char *operand- the operand it checks it's type, AddrMethodsOptions active[2]- an array with the allowed addresing methods for the operand, and int type- the type of the operand (source or destination).
+   @ Arguments: The function gets char *operand- the operand it checks it's type, AddressMethodsEncoding active[2]- an array with the allowed addresing methods for the operand, and int type- the type of the operand (source or destination).
    @ Description: The function checks what is the addressing method for the operand.
     If it is a label (direct parameter), it checks if it is exist in the table symbol (if not it yields error) and if the operand is both entry and externl which is illegal, and then it yeilds (prints) error too.
     Returns true if the operation is valid, and false if it isn't.

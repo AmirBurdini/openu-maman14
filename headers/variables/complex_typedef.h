@@ -19,20 +19,27 @@ legal values are (0-3)
 /*represents the addressing mehod detailed in the docs. */
 typedef struct
 {
-    // Amir change to 2 bits in all files !!!
-    unsigned int immediate : 1;
-    unsigned int direct : 1;
-    unsigned int index : 1;
-    unsigned int reg : 1;
-} AddrMethodsOptions;
+    Bool immediate : false;
+    Bool direct : false;
+    Bool index : false;
+    Bool reg : false;
+
+} AddressMethod;
+
+typedef struct
+{
+    unsigned int firstDigit;
+    unsigned int secondDigit;
+
+} AddressMethodsEncoding;
 
 /*represent a full detailed operation table data*/
 typedef struct
 {
     unsigned int opcode : 4; /*the operation code */
     char keyword[3];        /*the keyword for the operation name*/
-    AddrMethodsOptions src; /*legal addressing mehods for the source operand*/
-    AddrMethodsOptions des; /*legal addressing mehods for the destination operand*/
+    AddressMethodsEncoding src; /*legal addressing mehods for the source operand*/
+    AddressMethodsEncoding des; /*legal addressing mehods for the destination operand*/
 } Operation;
 
 /*ItemType is an identyfier parameter that we use in the hash table functions that both the macro table and the symbol table are built with*/
