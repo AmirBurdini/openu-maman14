@@ -232,13 +232,13 @@ void yieldErrorIntoFile(Error err)
     case entryDeclaredButNotDefined:
         fprintf(errorsFile, "operand is registered as .entry in table but is not defined in the file");
         break;
-    case requiredSourceOperandIsMissin:
+    case requiredSourceOperandIsMissing:
     {
         fprintf(errorsFile, "required source operand is missing");
         break;
     }
 
-    case requiredDestinationOperandIsMissin:
+    case requiredDestinationOperandIsMissing:
     {
         fprintf(errorsFile, "required destination operand is missing");
         break;
@@ -527,13 +527,13 @@ Bool yieldError(Error err)
     case entryDeclaredButNotDefined:
         fprintf(stderr, "operand is registered as .entry in table but is not defined in the file");
         break;
-    case requiredSourceOperandIsMissin:
+    case requiredSourceOperandIsMissing:
     {
         fprintf(stderr, "required source operand is missing");
         break;
     }
 
-    case requiredDestinationOperandIsMissin:
+    case requiredDestinationOperandIsMissing:
     {
         fprintf(stderr, "required destination operand is missing");
         break;

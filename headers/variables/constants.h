@@ -32,6 +32,7 @@
 #define STRING ".string"
 #define ENTRY ".entry"
 #define EXTERNAL ".extern"
+#define DEFINE ".define"
 /* Given just random Numbers that will be different then 0*/
 #define _TYPE_DATA 11
 #define _TYPE_STRING 22

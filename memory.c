@@ -101,6 +101,7 @@ void printWordBinary(unsigned index)
 
     printf("\n");
 }
+
 void calcFinalAddrsCountersValues()
 {
 

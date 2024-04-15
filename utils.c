@@ -1,15 +1,17 @@
 #include "data.h"
 
 const char *regs[REGS_SIZE] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
+
 Bool isMacroOpening(char *s)
 {
-    return !strcmp(s, "macro") ? True : False;
+    return !strcmp(s, "mer") ? True : False;
 }
 
 Bool isMacroClosing(char *s)
 {
-    return !strcmp(s, "endm") ? True : False;
+    return !strcmp(s, "endmer") ? True : False;
 }
+
 Bool isPossiblyUseOfMacro(char *s)
 {
     return !isLabelDeclaration(s) && !isOperation(s) && !isComment(s) && !isInstructionStrict(s) && !isMacroClosing(s) && !isMacroOpening(s);
@@ -22,13 +24,8 @@ Bool isLegalMacroName(char *s)
 
 Bool isInstruction(char *s)
 {
-
-    if ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL)))
-        return True;
-
-    else if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
+    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
     {
-        /*         yieldError(missinSpaceAfterInstruction); */
         return True;
     }
     else
@@ -56,6 +53,7 @@ Bool isRegistery(char *s)
     }
     return False;
 }
+
 Bool isValidImmediateParamter(char *s)
 {
     int i, len = strlen(s);
@@ -66,6 +64,7 @@ Bool isValidImmediateParamter(char *s)
             return False;
     return True;
 }
+
 Bool isIndexParameter(char *s)
 {
     int len = strlen(s);
@@ -118,6 +117,7 @@ Bool isComment(char *s)
     s = trimFromLeft(s);
     return s[0] == ';' ? True : False;
 }
+
 Bool isOperation(char *s)
 {
     return (getOperationByName(s) != NULL) ? True : False;
