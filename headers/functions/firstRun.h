@@ -43,13 +43,13 @@ Bool handleOperation(char *operationName, char *args);
   Returns true if the operands are valid, and false if they aren't.
  */
 
-Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions active[2]);
+Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEncoding active[2]);
 /* @ Function: validateOperandMatch
-   @ Arguments: This function gets AddrMethodsOptions allowedAddrs- the allowed addressing methods for the source and destination operands, AddrMethodsOptions active[2]- an array that represent types of addressing methods for the operands,
+   @ Arguments: This function gets AddressMethodsEncoding allowedAddrs- the allowed addressing methods for the source and destination operands, AddressMethodsEncoding active[2]- an array that represent types of addressing methods for the operands,
     char *operand- the operands, and type- the type of the operand.
    @ Description: The function checks if the operand has the right addressing mrhod, returns true if it does, and false if it doesn't.
    */
-Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions active[2], char *operand, int type);
+Bool validateOperandMatch(AddressMethodsEncoding allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type);
 
 Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line);
 /* @ Function: Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)

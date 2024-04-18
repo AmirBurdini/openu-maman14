@@ -1,18 +1,19 @@
 #include "data.h"
 
-void writeAdditionalOperandsWords(const Operation *op, AddrMethodsOptions active, char *value);
+void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding active, char *value);
+
+//Refactor needed
 Bool writeOperationBinary(char *operationName, char *args)
 {
     const Operation *op = getOperationByName(operationName);
     char *first, *second;
-    AddrMethodsOptions active[2] = {{0, 0, 0, 0}, {0, 0, 0, 0}};
+    AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
     first = strtok(args, ", \t\n\f\r");
     second = strtok(NULL, ", \t\n\f\r");
     writeFirstWord(op);
 
     if (first && second && (detectOperandType(first, active, 0) && detectOperandType(second, active, 1)))
     {
-
         writeSecondWord(first, second, active, op);
         writeAdditionalOperandsWords(op, active[0], first);
         writeAdditionalOperandsWords(op, active[1], second);
@@ -23,7 +24,7 @@ Bool writeOperationBinary(char *operationName, char *args)
         writeSecondWord(first, second, active, op);
         writeAdditionalOperandsWords(op, active[1], second);
     }
-    else if (!first && !second && !op->funct)
+    else if (!first && !second)
         return True;
 
     else
@@ -32,17 +33,18 @@ Bool writeOperationBinary(char *operationName, char *args)
     return True;
 }
 
-void writeAdditionalOperandsWords(const Operation *op, AddrMethodsOptions active, char *value)
+void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding active, char *value)
 {
+    AddressMethod method = convertBinaryToAddressMethod(active);
 
-    if (active.index)
+    if (method.index)
     {
         parseLabelNameFromIndexAddrOperand(value);
         writeDirectOperandWord(value);
     }
-    else if (active.direct)
+    else if (method.direct)
         writeDirectOperandWord(value);
-    else if (active.immediate)
+    else if (method.immediate)
         writeImmediateOperandWord(value);
 }
 
@@ -52,12 +54,13 @@ Bool writeDataInstruction(char *token)
     while (token != NULL)
     {
         num = atoi(token);
-        addWord((A << 16) | num, Data);
+        addWord((A) | num, Data);
         token = strtok(NULL, ", \t\n\f\r");
     }
     return True;
 }
 
+//Refactor needed
 Bool writeStringInstruction(char *s)
 {
     char *start = strchr(s, '\"');
@@ -71,74 +74,70 @@ Bool writeStringInstruction(char *s)
     return True;
 }
 
-void writeSecondWord(char *first, char *second, AddrMethodsOptions active[2], const Operation *op)
+//Refactor needed
+void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2], const Operation *op)
 {
-    unsigned secondWord = (A << 16) | (op->funct << 12);
-    if (first && (active[0].reg || active[0].index))
-        secondWord = secondWord | (active[0].reg ? (getRegisteryNumber(first) << 8) : (parseRegNumberFromIndexAddrOperand(first) << 8)) | (active[0].reg ? (REGISTER_DIRECT_ADDR << 6) : (INDEX_ADDR << 6));
-    else if (first && (active[0].direct || active[0].immediate))
-        secondWord = secondWord | (0 << 8) | (active[0].direct ? (DIRECT_ADDR << 6) : (IMMEDIATE_ADDR << 6));
-    if (second && (active[1].reg || active[1].index))
-        secondWord = secondWord | (active[1].reg ? (getRegisteryNumber(second) << 2) : (parseRegNumberFromIndexAddrOperand(second) << 2)) | (active[1].reg ? (REGISTER_DIRECT_ADDR) : (INDEX_ADDR));
-    else if (second && (active[1].direct || active[1].immediate))
-        secondWord = secondWord | (0 << 2) | (active[1].direct ? (DIRECT_ADDR) : (IMMEDIATE_ADDR));
+    AddressMethod sourceMethod = convertBinaryToAddressMethod(active[0]);
+    AddressMethod destMethod = convertBinaryToAddressMethod(active[1]);
+
+    unsigned secondWord = (A << 16) | (op->op << 12);
+    if (first && (sourceMethod.reg || sourceMethod.index))
+        secondWord = secondWord | (sourceMethod.reg ? (getRegisteryNumber(first) << 8) : (parseRegNumberFromIndexAddrOperand(first) << 8)) | (sourceMethod.reg ? (REGISTER_DIRECT_ADDR << 6) : (INDEX_ADDR << 6));
+    else if (first && (sourceMethod.direct || sourceMethod.immediate))
+        secondWord = secondWord | (0 << 8) | (sourceMethod.direct ? (DIRECT_ADDR << 6) : (IMMEDIATE_ADDR << 6));
+    if (second && (destMethod.reg || destMethod.index))
+        secondWord = secondWord | (destMethod.reg ? (getRegisteryNumber(second) << 2) : (parseRegNumberFromIndexAddrOperand(second) << 2)) | (destMethod.reg ? (REGISTER_DIRECT_ADDR) : (INDEX_ADDR));
+    else if (second && (destMethod.direct || destMethod.immediate))
+        secondWord = secondWord | (0 << 2) | (destMethod.direct ? (DIRECT_ADDR) : (IMMEDIATE_ADDR));
 
     addWord(secondWord, Code);
 }
 
 void writeFirstWord(const Operation *op)
 {
-    unsigned firstWord = (A << 16) | op->op;
+    unsigned firstWord = (A << 10) | op->op;
     addWord(firstWord, Code);
 }
 
 void writeDirectOperandWord(char *labelName)
 {
 
-    unsigned base = 0, offset = 0;
     if (isExternal(labelName))
     {
-        base = getIC();
-        addWord((E << 16) | 0, Code);
-        offset = getIC();
-        addWord((E << 16) | 0, Code);
-        updateExtPositionData(labelName, base, offset);
+        addWord((E), Code);
+        updateExtPositionData(labelName);
     }
 
     else
     {
-        base = getSymbolBaseAddress(labelName);
-        offset = getSymbolOffset(labelName);
-        addWord((R << 16) | base, Code);
-        addWord((R << 16) | offset, Code);
+        addWord((R), Code);
     }
 }
 
 void writeImmediateOperandWord(char *n)
 {
     n++;
-    addWord((A << 16) | atoi(n), Code);
+    if ((*n & A) == 0) {
+    addWord((A) | atoi(n), Code);
+    }
 }
 
-Bool detectOperandType(char *operand, AddrMethodsOptions active[2], int type)
+Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type)
 {
-
+    AddressMethod method = convertBinaryToAddressMethod(active[type]);
     if (isRegistery(operand))
-        active[type].reg = 1;
+        method.reg = True;
     else if (isValidImmediateParamter(operand))
-        active[type].immediate = 1;
+        method.immediate = True;
     else if (isValidIndexParameter(operand))
-        active[type].index = 1;
+        method.index = True;
     else
     {
-
         if (isSymbolExist(operand))
         {
-
             if (isEntry(operand) && !isNonEmptyEntry(operand))
                 return yieldError(entryDeclaredButNotDefined);
-
-            active[type].direct = 1;
+            method.direct = True;
         }
         else
             return yieldError(labelNotExist);

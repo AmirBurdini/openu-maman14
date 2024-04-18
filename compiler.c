@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     handleSourceFiles(argc, argv);
     return 0;
 }
+
 int handleSourceFiles(int argc, char *argv[])
 {
     int filesCount = argc - 1;
@@ -27,6 +28,7 @@ int handleSourceFiles(int argc, char *argv[])
 
     return 0;
 }
+
 void handleSingleFile(char *arg)
 {
     FILE *src = NULL, *target = NULL;

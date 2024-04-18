@@ -3,7 +3,7 @@
 Bool handleOperation(char *operationName, char *args)
 {
     const Operation *p = getOperationByName(operationName);
-    AddrMethodsOptions active[2] = {{0, 0, 0, 0}, {0, 0, 0, 0}};
+    AddressMethodsEncoding active[2] = {{0,0}, {0, 0}};
     char *first = 0;
     char *second = 0;
     char *extra = 0;
@@ -20,7 +20,7 @@ Bool handleOperation(char *operationName, char *args)
         {
             extra = strtok(NULL, ", \t\n\f\r");
             if (extra)
-                areOperandsLegal = yieldError(extraOperandsPassed);
+                return yieldError(extraOperandsPassed);
         }
         else
             second = 0;
@@ -30,79 +30,68 @@ Bool handleOperation(char *operationName, char *args)
     if (areOperandsLegal)
     {
         int size = 2;
-        if (active[0].immediate || active[1].immediate)
+        AddressMethod firstMethod = convertBinaryToAddressMethod(active[0]);
+        AddressMethod secondMethod = convertBinaryToAddressMethod(active[1]);
+
+        if (firstMethod.immediate || secondMethod.immediate)
             size++;
-        if ((active[0].direct || active[0].index) || (active[1].direct || active[1].index))
+        if (firstMethod.direct || firstMethod.index || secondMethod.direct || secondMethod.index)
             size += 2;
-        if (!p->funct && (!active[0].direct && !active[0].immediate && !active[0].index && !active[0].reg) && (!active[1].direct && !active[1].immediate && !active[1].index && !active[1].reg))
+        if (!firstMethod.immediate && !firstMethod.direct && !firstMethod.index && !firstMethod.reg && 
+            !secondMethod.immediate && !secondMethod.direct && !secondMethod.index && !secondMethod.reg)
             size = 1;
 
-        active[0].direct = active[0].immediate = active[0].index = active[0].reg = 0;
-        active[1].direct = active[1].immediate = active[1].index = active[1].reg = 0;
+        active[0].firstDigit = active[0].secondDigit = 0;
+        active[1].firstDigit = active[1].secondDigit = 0;
         increaseInstructionCounter(size);
     }
 
     return areOperandsLegal;
 }
-Bool parseOperands(char *src, char *des, const Operation *op, AddrMethodsOptions active[2])
-{
 
+Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEncoding active[2])
+{
     int expectedOperandsCount = 0;
     int operandsPassedCount = 0;
     Bool isValid = True;
+
+    Bool hasSource = (op->src.direct || op->src.immediate || op->src.reg || op->src.index);
+    Bool hasDestination = (op->des.direct || op->des.immediate || op->des.reg || op->des.index);
+
     if (src)
         operandsPassedCount++;
     if (des)
         operandsPassedCount++;
-    if (op->src.direct || op->src.immediate || op->src.index || op->src.reg)
+    if (hasSource)
         expectedOperandsCount++;
-    if (op->des.direct || op->des.immediate || op->des.index || op->des.reg)
+    if (hasDestination)
         expectedOperandsCount++;
 
-    if (expectedOperandsCount == 1 && operandsPassedCount == 1)
+    if (operandsPassedCount != expectedOperandsCount)
+        isValid = yieldError(extraOperandsPassed);
+
+    if (expectedOperandsCount == 0)
+        return True;
+
+    if (expectedOperandsCount.direct)
     {
         des = src;
         src = 0;
     }
 
-    if ((expectedOperandsCount == operandsPassedCount) && expectedOperandsCount == 0)
-        return True;
-
-    if (operandsPassedCount > expectedOperandsCount)
-        isValid = yieldError(extraOperandsPassed);
-
-    if ((op->src.direct || op->src.immediate || op->src.reg || op->src.index) && (op->des.direct || op->des.immediate || op->des.reg || op->des.index))
+    if (hasSource)
     {
-
-        if (!src)
-            isValid = yieldError(requiredSourceOperandIsMissin);
-
-        else
-            isValid = validateOperandMatch(op->src, active, src, 0) && isValid;
-
-        if (!des)
-            isValid = yieldError(requiredDestinationOperandIsMissin);
-        else
-            isValid = validateOperandMatch(op->des, active, des, 1) && isValid;
+        isValid = !src? yieldError(requiredSourceOperandIsMissing) : validateOperandMatch(op->src, active, src, 0) && isValid;
     }
-    else if (op->src.direct || op->src.immediate || op->src.reg || op->src.index)
+    if (hasDestination)
     {
-        if (!src)
-            return yieldError(requiredSourceOperandIsMissin);
-        else
-            return validateOperandMatch(op->src, active, src, 0) && isValid;
-    }
-    else if (op->des.direct || op->des.immediate || op->des.reg || op->des.index)
-    {
-        if (!des)
-            return yieldError(requiredDestinationOperandIsMissin);
-        else
-            return validateOperandMatch(op->des, active, des, 1) && isValid;
+        isValid = !des? yieldError(requiredDestinationOperandIsMissing) : validateOperandMatch(op->des, active, des, 1) && isValid;
     }
 
     return isValid;
 }
-Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions active[2], char *operand, int type)
+
+Bool validateOperandMatch(AddressMethod allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type)
 {
     Bool isAny = isValidImmediateParamter(operand) || isValidIndexParameter(operand) || isRegistery(operand) || verifyLabelNaming(operand) || isIndexParameter(operand);
     Bool isImmediate = isValidImmediateParamter(operand);
@@ -125,26 +114,33 @@ Bool validateOperandMatch(AddrMethodsOptions allowedAddrs, AddrMethodsOptions ac
     else if (!allowedAddrs.index && isDirectIndex)
         return type == 1 ? yieldError(desOperandTypeIsNotAllowed) : yieldError(srcOperandTypeIsNotAllowed);
 
-    active[type].direct = isDirect;
-    active[type].reg = isReg;
-    active[type].immediate = isImmediate;
-    active[type].index = isDirectIndex;
+    if (isImmediate) {
+        active->firstDigit = 0;
+        active->secondDigit = 0;
+    } else if (isDirect) {
+        active->firstDigit = 1;
+        active->secondDigit = 0;
+    } else if (isDirectIndex) {
+        active->firstDigit = 0;
+        active->secondDigit = 1;
+    } else {
+        active->firstDigit = 1;
+        active->secondDigit = 1;
+    }
 
     return True;
 }
 
 Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
 {
-
     if (isInstruction(firstToken))
     {
-
         if (type == _TYPE_DATA)
         {
-            return countAndVerifyDataArguments(line) ? True : False;
+            return verifyDataArguments(line) ? True : False;
         }
         else if (type == _TYPE_STRING)
-            return countAndVerifyStringArguments(line) ? True : False;
+            return verifyStringArguments(line) ? True : False;
 
         if (type == _TYPE_ENTRY || type == _TYPE_EXTERNAL)
         {
@@ -183,7 +179,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
         if (!isLabelNameAvailable)
             yieldError(illegalSymbolNameAlreadyInUse);
 
-        if (((type == _TYPE_DATA && countAndVerifyDataArguments(line)) || (type == _TYPE_STRING && countAndVerifyStringArguments(line))) && isLabelNameAvailable)
+        if (((type == _TYPE_DATA && verifyDataArguments(line)) || (type == _TYPE_STRING && verifyStringArguments(line))) && isLabelNameAvailable)
         {
 
             return addSymbol(firstToken, dataCounter, 0, 1, 0, 0) ? True : False;
@@ -196,6 +192,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
 
     return False;
 }
+
 Bool handleLabel(char *labelName, char *nextToken, char *line)
 {
     Bool isValid = True;

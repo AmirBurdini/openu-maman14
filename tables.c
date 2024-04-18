@@ -12,9 +12,10 @@ void findAllExternals();
 void addExtListItem(char *name);
 void resetExtList();
 ExtListItem *findExtOpListItem(char *name);
-void updateExtPositionData(char *name, unsigned base, unsigned offset);
+void updateExtPositionData(char *name);
 void freeTableItem(Item *item);
 void freeTablesMemory();
+
 ExtListItem *findExtOpListItem(char *name)
 {
     extern ExtListItem *extListHead;
@@ -63,16 +64,10 @@ void updateExtPositionData(char *name, unsigned base, unsigned offset)
     if (np->value.base)
     {
         ExtPositionData *new = (ExtPositionData *)malloc(sizeof(ExtPositionData));
-        new->base = base;
-        new->offset = offset;
         new->next = np->value.next;
         np->value.next = new;
     }
-    else
-    {
-        np->value.base = base;
-        np->value.offset = offset;
-    }
+
 
     externalCount++;
 }
@@ -254,6 +249,7 @@ Bool isSymbolExist(char *name)
 {
     return lookup(name, Symbol) != NULL ? True : False;
 }
+
 Bool isExternal(char *name)
 {
     Item *p = lookup(name, Symbol);
@@ -261,6 +257,7 @@ Bool isExternal(char *name)
         return False;
     return p->val.s.attrs.external;
 }
+
 Bool isEntry(char *name)
 {
     Item *p = lookup(name, Symbol);
@@ -359,6 +356,7 @@ Item *addMacro(char *name, int start, int end)
 
     return macro;
 }
+
 Item *updateMacro(char *name, int start, int end)
 {
     Item *macro = getMacro(name);
@@ -408,6 +406,7 @@ Bool areEntriesExist()
 {
     return entriesCount > 0 ? True : False;
 }
+
 Bool areExternalsExist()
 {
     return externalCount > 0 ? True : False;
