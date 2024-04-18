@@ -2,7 +2,6 @@
 
 void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding active, char *value);
 
-//Refactor needed
 Bool writeOperationBinary(char *operationName, char *args)
 {
     const Operation *op = getOperationByName(operationName);
@@ -60,7 +59,6 @@ Bool writeDataInstruction(char *token)
     return True;
 }
 
-//Refactor needed
 Bool writeStringInstruction(char *s)
 {
     char *start = strchr(s, '\"');
@@ -68,9 +66,9 @@ Bool writeStringInstruction(char *s)
     start++;
     len = strlen(start);
     for (i = 0; i < len - 2; i++)
-        addWord((A << 16) | start[i], Data);
+        addWord((A) | start[i], Data);
 
-    addWord((A << 16) | '\0', Data);
+    addWord((A) | '\0', Data);
     return True;
 }
 
@@ -80,7 +78,7 @@ void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2]
     AddressMethod sourceMethod = convertBinaryToAddressMethod(active[0]);
     AddressMethod destMethod = convertBinaryToAddressMethod(active[1]);
 
-    unsigned secondWord = (A << 16) | (op->op << 12);
+    unsigned secondWord = (A) | (op->opcode << 12);
     if (first && (sourceMethod.reg || sourceMethod.index))
         secondWord = secondWord | (sourceMethod.reg ? (getRegisteryNumber(first) << 8) : (parseRegNumberFromIndexAddrOperand(first) << 8)) | (sourceMethod.reg ? (REGISTER_DIRECT_ADDR << 6) : (INDEX_ADDR << 6));
     else if (first && (sourceMethod.direct || sourceMethod.immediate))
@@ -93,9 +91,10 @@ void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2]
     addWord(secondWord, Code);
 }
 
+//Still need to verify if it should be like this 
 void writeFirstWord(const Operation *op)
 {
-    unsigned firstWord = (A << 10) | op->op;
+    unsigned firstWord = (A) | op->opcode;
     addWord(firstWord, Code);
 }
 
