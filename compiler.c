@@ -16,7 +16,7 @@ int handleSourceFiles(int argc, char *argv[])
     int i = 1;
     if (filesCount < 1)
     {
-        fprintf(stderr, "\n\nYou did not passed any source files to the assembler!\n\n");
+        fprintf(stderr, "\n\n No Source files detected.\n\n");
         exit(1);
     }
     while (--argc)
@@ -60,7 +60,7 @@ void handleSingleFile(char *arg)
 
     fileName[strlen(fileName) - 1] = 'm'; /* change the files to be .am files */
     (*setPath)(fileName);
-    /* if the expanded soure file couldn't be created it alerts it to the user */
+    /* if the expanded source file couldn't be created it alerts it to the user */
     if ((target = fopen(fileName, "w+")) == NULL)
     {
 

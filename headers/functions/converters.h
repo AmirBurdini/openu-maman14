@@ -32,5 +32,3 @@ char *cloneString(char *s);
 char *trimFromLeft(char *s);
 
 char *numToBin(int num);
-
-unsigned binaryStringToHexNumber(char binaryStr[4]);

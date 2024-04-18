@@ -267,14 +267,16 @@ void parseAssemblyCode(FILE *src)
     char *(*fileName)() = &getFileNamePath;
 
     (*resetCurrentLineCounter)();
-    if ((*globalState)() == secondRun)
+    if ((*globalState)() == secondRun) 
+    {
         printf("\n\n\nSecond Run:(%s)\n", (*fileName)());
-    else if ((*globalState)() == firstRun)
+    } else if ((*globalState)() == firstRun) 
+    {
         printf("\n\n\nFirst Run:(%s)\n", (*fileName)());
+    }
 
     while (((c = fgetc(src)) != EOF))
     {
-
         if (isspace(c) && i > 0)
             line[i++] = ' ';
 
