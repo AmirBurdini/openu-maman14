@@ -55,19 +55,10 @@ void resetExtList()
     extListHead = NULL;
 }
 
-void updateExtPositionData(char *name, unsigned base, unsigned offset)
+void updateExtPositionData(char *name)
 {
     // Amir remove all references to offset and base
     ExtListItem *np = findExtOpListItem(name);
-    
-    if (np->value.base)
-    {
-        ExtPositionData *new = (ExtPositionData *)malloc(sizeof(ExtPositionData));
-        new->next = np->value.next;
-        np->value.next = new;
-    }
-
-
     externalCount++;
 }
 
