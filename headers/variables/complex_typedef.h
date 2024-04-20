@@ -19,10 +19,10 @@ legal values are (0-3)
 /*represents the addressing mehod detailed in the docs. */
 typedef struct
 {
-    Bool immediate : false;
-    Bool direct : false;
-    Bool index : false;
-    Bool reg : false;
+    unsigned int immediate : 1;
+    unsigned int direct : 1;
+    unsigned int index : 1;
+    unsigned int reg : 1;
 
 } AddressMethod;
 

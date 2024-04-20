@@ -62,7 +62,7 @@ Bool parseLine(char *token, char *line);
 */
 Bool handleSingleLine(char *line);
 
-verifyDefinitionArguments(char *line);
+Bool verifyDefinitionArguments(char *line);
 
 /* @ Function:parseAssemblyCode
    @ Arguments: The function gets FILE *src which is a file after the pre proccesoring.
