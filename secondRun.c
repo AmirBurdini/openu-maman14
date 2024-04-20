@@ -99,7 +99,6 @@ void writeFirstWord(const Operation *op)
 
 void writeDirectOperandWord(char *labelName)
 {
-
     if (isExternal(labelName))
     {
         addWord((E), Code);
