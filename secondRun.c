@@ -78,20 +78,19 @@ void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2]
     AddressMethod sourceMethod = convertBinaryToAddressMethod(active[0]);
     AddressMethod destMethod = convertBinaryToAddressMethod(active[1]);
 
-    unsigned secondWord = (A) | (op->opcode << 12);
+    unsigned secondWord = (A) | (op->opcode << 6);
     if (first && (sourceMethod.reg || sourceMethod.index))
-        secondWord = secondWord | (sourceMethod.reg ? (getRegisteryNumber(first) << 8) : (parseRegNumberFromIndexAddrOperand(first) << 8)) | (sourceMethod.reg ? (REGISTER_DIRECT_ADDR << 6) : (INDEX_ADDR << 6));
+        secondWord = secondWord | (sourceMethod.reg ? (REGISTER_DIRECT_ADDR << 4) : (INDEX_ADDR << 4));
     else if (first && (sourceMethod.direct || sourceMethod.immediate))
-        secondWord = secondWord | (0 << 8) | (sourceMethod.direct ? (DIRECT_ADDR << 6) : (IMMEDIATE_ADDR << 6));
+        secondWord = secondWord | (sourceMethod.direct ? (DIRECT_ADDR << 4) : (IMMEDIATE_ADDR << 4));
     if (second && (destMethod.reg || destMethod.index))
-        secondWord = secondWord | (destMethod.reg ? (getRegisteryNumber(second) << 2) : (parseRegNumberFromIndexAddrOperand(second) << 2)) | (destMethod.reg ? (REGISTER_DIRECT_ADDR) : (INDEX_ADDR));
+        secondWord = secondWord | (destMethod.reg ? (REGISTER_DIRECT_ADDR << 2) : (INDEX_ADDR << 2));
     else if (second && (destMethod.direct || destMethod.immediate))
-        secondWord = secondWord | (0 << 2) | (destMethod.direct ? (DIRECT_ADDR) : (IMMEDIATE_ADDR));
+        secondWord = secondWord | (destMethod.direct ? (DIRECT_ADDR << 2) : (IMMEDIATE_ADDR << 2));
 
     addWord(secondWord, Code);
 }
 
-//Still need to verify if it should be like this 
 void writeFirstWord(const Operation *op)
 {
     unsigned firstWord = (A) | op->opcode;
