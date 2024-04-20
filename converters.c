@@ -102,3 +102,31 @@ char *numToBin(int num)
     strcat(word, "\0");
     return word;
 }
+
+char *decimalToBase4(int number) {
+
+    // Calculate maximum length needed for base-4 representation
+    int temp = abs(number);
+    int length = 0;
+    int remainder;
+    int index;
+    while (temp > 0) {
+        length++;
+        temp /= 4;
+    }
+
+    // Allocate memory for the base-4 representation
+    char* result = (char*)malloc((length) * sizeof(char));
+
+    // Convert number to base-4
+    temp = abs(number);
+    index = 0;
+    while (temp > 0) {
+        remainder = temp % 4;
+        result[index++] = (char)('0' + remainder);
+        temp /= 4;
+    }
+
+    result[index] = '\0';  
+    return result;
+}

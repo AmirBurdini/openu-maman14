@@ -22,16 +22,16 @@ char base4ToSign(char digit);
    in case of a digit or anything else it will put E for indicating error.
 */
 
-char binaryToBase4(char *binary);
-/* @ Function: binaryToBase4
+char encodeNumber(char *binary);
+/* @ Function: decimalToBase4
    @ Arguments: The function gets char *binary - string of a binary number
    @ Description: The function takes Binary number from the file and converts it to a number in base4.
 */
 
-void processLine(char *line);
+char *processLine(char *line);
 /* @ Function: processLine
    @ Arguments: The function gets char *line - string line in a file
-   @ Description: The function a line from our file and use binaryToBase4 function to convert the line to base4 and 
+   @ Description: The function a line from our file and use decimalToBase4 function to convert the line to base4 and 
    process the line. 
 */
 

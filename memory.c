@@ -117,7 +117,6 @@ void writeMemoryImageToObFile(FILE *fp)
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
     for (i = 0; i < totalSize; i++)
     {
-        // German : change to print binary word as a line in the file instead of 5 Hex words for each line 
-        fprintf(fp, "%04d A%x-B%x-C%x-D%x-E%x\n", MEMORY_START + i, hexImg[i]._A, hexImg[i]._B, hexImg[i]._C, hexImg[i]._D, hexImg[i]._E);
+        fprintf(fp, "\n", MEMORY_START + i, *encodeNumber(&binaryImg[i]));
     }
 }
