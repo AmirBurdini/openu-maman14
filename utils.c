@@ -56,8 +56,15 @@ Bool isRegistery(char *s)
 Bool isValidImmediateParamter(char *s)
 {
     int i, len = strlen(s);
-    if (len < 2 || s[0] != '#' || (!(s[1] == '-' || s[1] == '+' || isdigit(s[1]))))
+    if (s[0] != '#')
         return False;
+    if (s[1] == '-' && !isdigit(s[2]))
+        return False;
+
+    if (isLabelNameAlreadyTaken(s[1], Symbol)) {
+        return True;
+    }
+
     for (i = 2; i < len; i++)
         if (!isdigit(s[i]))
             return False;
@@ -67,14 +74,18 @@ Bool isValidImmediateParamter(char *s)
 Bool isIndexParameter(char *s)
 {
     int len = strlen(s);
-    char *opening = 0, *closing = 0;
+    char *opening = opening = strchr(s, '[');
+    char *opening = opening = strchr(s, ']');
     Bool result = True;
-    if (len < 5)
+    if (len < 4)
         return False;
-    else if ((opening = strchr(s, '[')) == NULL || (closing = strchr(s, ']')) == NULL)
+    if (opening == NULL || closing == NULL)
         return False;
-    else if (closing < opening || (s[len - 1] != ']'))
+    if (closing < opening || (s[len - 1] != ']'))
         return False;
+    if (isLabelNameAlreadyTaken(opening + 1, Symbol)) {
+        return True;
+    }
     else
     {
         opening++;
