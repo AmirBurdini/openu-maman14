@@ -103,7 +103,6 @@ void printWordBinary(unsigned index)
 
 void calcFinalAddrsCountersValues()
 {
-
     ICF = IC;
     DCF = ICF + DC;
     DC = IC;

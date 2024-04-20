@@ -101,7 +101,6 @@ typedef struct
 */
 typedef struct
 {
-
     unsigned value;
     unsigned base;
     unsigned offset;

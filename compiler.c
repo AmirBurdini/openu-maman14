@@ -33,8 +33,8 @@ void handleSingleFile(char *arg)
 {
     FILE *src = NULL, *target = NULL;
     void (*setPath)(char *) = &setFileNamePath;
-    State (*globalState)() = &getGlobalState;
-    void (*setState)(State) = &setGlobalState;
+    Step (*currentCompilerState)() = &getCompilerStep;
+    void (*setState)(Step) = &setCompilerStep;
 
     char *fileName = (char *)calloc(strlen(arg) + 4, sizeof(char *));
     extern void resetMemoryCounters();
@@ -87,14 +87,14 @@ void handleSingleFile(char *arg)
         /* moves on to the first run, looks for errors in the code, counts how much space in the
          memory the program needs and starts to parse the assembly code.
          */
-        if ((*globalState)() == firstRun)
+        if ((*currentCompilerState)() == firstRun)
         {
 
             rewind(target);
             parseAssemblyCode(target);
             /* if the first run ended with no errors, it moves on to the second run,
             builds the memory image, prints the symbols table */
-            if ((*globalState)() == secondRun)
+            if ((*currentCompilerState)() == secondRun)
             {
                 calcFinalAddrsCountersValues();
                 updateFinalSymbolTableValues();
@@ -104,7 +104,7 @@ void handleSingleFile(char *arg)
                 parseAssemblyCode(target);
                 /* if the second run ended with no errors, it moves to export file
                 and creates the additional files (.ob, .ent and .ext files) */
-                if ((*globalState)() == exportFiles)
+                if ((*currentCompilerState)() == exportFiles)
                 {
                     fileName[strlen(fileName) - 3] = '\0';
                     (*setPath)(fileName);
