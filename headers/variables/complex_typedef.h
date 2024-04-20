@@ -19,10 +19,10 @@ legal values are (0-3)
 /*represents the addressing mehod detailed in the docs. */
 typedef struct
 {
-    Bool immediate : false;
-    Bool direct : false;
-    Bool index : false;
-    Bool reg : false;
+    unsigned int  immediate : 1;
+    unsigned int  direct : 1;
+    unsigned int  index : 1;
+    unsigned int  reg : 1;
 
 } AddressMethod;
 
@@ -38,8 +38,8 @@ typedef struct
 {
     unsigned int opcode : 4; /*the operation code */
     char keyword[3];        /*the keyword for the operation name*/
-    AddressMethodsEncoding src; /*legal addressing mehods for the source operand*/
-    AddressMethodsEncoding des; /*legal addressing mehods for the destination operand*/
+    AddressMethod src; /*legal addressing mehods for the source operand*/
+    AddressMethod des; /*legal addressing mehods for the destination operand*/
 } Operation;
 
 /*ItemType is an identyfier parameter that we use in the hash table functions that both the macro table and the symbol table are built with*/

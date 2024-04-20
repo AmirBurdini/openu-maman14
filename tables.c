@@ -57,10 +57,9 @@ void resetExtList()
 
 void updateExtPositionData(char *name, unsigned base, unsigned offset)
 {
-
+    // Amir remove all references to offset and base
     ExtListItem *np = findExtOpListItem(name);
-    /*     printf("line 62 in table inside update ext position data\nname:%s\nbase:%u\noffset:%u\nnp->name:%s\nnp->value.base:%d\n", name, base, offset, np->name, np->value.base);
-     */
+    
     if (np->value.base)
     {
         ExtPositionData *new = (ExtPositionData *)malloc(sizeof(ExtPositionData));
@@ -184,11 +183,6 @@ Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, uns
 
 Bool updateSymbol(Item *p, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal)
 {
-    /*     printf("inside updateSymbol\n");
-        printf("name:%s value:%d isCode:%u isData:%u isEntry:%u isExternal:%u\n", p->name, value, isCode, isData, isEntry, isExternal);
-     */
-    /*     printf("inside updateSymbol\n");
-     */
     if (((p->val.s.attrs.external) && (value || isData || isEntry || isCode)))
         return yieldError(illegalOverrideOfExternalSymbol);
 

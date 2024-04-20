@@ -32,3 +32,5 @@ char *cloneString(char *s);
 char *trimFromLeft(char *s);
 
 char *numToBin(int num);
+
+char *decimalToBase4(int number);

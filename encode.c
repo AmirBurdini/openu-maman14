@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include "data.h"
 
 /* Function to convert a base-4 digit to the corresponding sign */
 char base4ToSign(char digit) {
@@ -15,26 +12,33 @@ char base4ToSign(char digit) {
         case '3':
             return '!';
         default:
-            return 'E'; /* Handle invalid digits*/
+            return '?'; /* Handle invalid digits*/
     }
 }
 
-/* Function to convert a binary string to base-4 representation*/
-char binaryToBase4(char *binary) {
-    int decimal = (binary[0] - '0') * 2 + (binary[1] - '0'); /* Convert 2-bit binary to decimal */
-    char base4_digit = decimal % 4 + '0';
-    return base4ToSign(base4_digit); /* Convert base-4 digit to sign */
+char *encodeNumber(char *number) {
+
+    char *result, *temp = '';
+    result = temp;
+    int index = 0;
+    while (number[index] = '\0') {
+        
+        temp[index] = base4ToSign(number[index]);
+        index++;
+    }
+
+    return result;
 }
 
 /* Function to process each line of the file */
-void processLine(char *line) {
+char *processLine(char *line) {
     char *space = strchr(line, ' '); /* Find the space separator */
     int i;
     if (space != NULL) {
         char *binary = space + 1; /* Extract binary part after the space */
         int len = strlen(binary);
         for (i = 0; i < len; i += 2) {
-            binary[i/2] = binaryToBase4(binary + i); /* Convert 2-bit group to base-4 */
+            binary[i/2] = decimalToBase4(binary + i); /* Convert 2-bit group to base-4 */
         }
         binary[len/2] = '\0'; /* Null-terminate the string */
     }
@@ -71,18 +75,3 @@ FILE *convertFile(const char *inputFileName) {
 
     return outputFile; 
 }
-
-/*
-int main() {
-
-    FILE *outputFileName = convertFile("input.txt");
-
-    if (outputFileName != NULL) {
-        printf("Conversion successful.\n");
-    } else {
-        printf("Error: Conversion failed.\n");
-    }
-
-    return 0;
-}
-*/
