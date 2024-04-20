@@ -29,13 +29,13 @@ Bool handleOperation(char *operationName, char *args)
 
     if (areOperandsLegal)
     {
-        int size = 2;
+        int size = 1;
         AddressMethod firstMethod = convertBinaryToAddressMethod(active[0]);
         AddressMethod secondMethod = convertBinaryToAddressMethod(active[1]);
 
-        if (firstMethod.immediate || secondMethod.immediate)
+        if ((firstMethod.immediate || secondMethod.immediate) || (firstMethod.direct || secondMethod.direct))
             size++;
-        if (firstMethod.direct || firstMethod.index || secondMethod.direct || secondMethod.index)
+        if (firstMethod.index || secondMethod.index)
             size += 2;
         if (!firstMethod.immediate && !firstMethod.direct && !firstMethod.index && !firstMethod.reg && 
             !secondMethod.immediate && !secondMethod.direct && !secondMethod.index && !secondMethod.reg)
@@ -67,17 +67,18 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEnco
     if (hasDestination)
         expectedOperandsCount++;
 
-    if (operandsPassedCount != expectedOperandsCount)
-        isValid = yieldError(extraOperandsPassed);
-
-    if (expectedOperandsCount == 0)
-        return True;
-
-    if (expectedOperandsCount.direct)
+    if (expectedOperandsCount == 1 && operandsPassedCount == 1)
     {
         des = src;
         src = 0;
     }
+
+    if ((expectedOperandsCount == operandsPassedCount) && expectedOperandsCount == 0)
+        return True;
+
+
+    if (operandsPassedCount > expectedOperandsCount)
+        isValid = yieldError(extraOperandsPassed);
 
     if (hasSource)
     {

@@ -57,7 +57,7 @@ void resetExtList()
 
 void updateExtPositionData(char *name, unsigned base, unsigned offset)
 {
-
+    // Amir remove all references to offset and base
     ExtListItem *np = findExtOpListItem(name);
     
     if (np->value.base)
