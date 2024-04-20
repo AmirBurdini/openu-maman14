@@ -148,4 +148,6 @@ Bool verifyLabelNamingAndPrintErrors(char *s);
    If it finds an error it yields (prints) it and returns false, else returns true.
 */
 
+Bool isDefinition(char *s);
+
 AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method);

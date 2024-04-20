@@ -45,9 +45,9 @@ Bool verifyStringArguments(char *line);
 
 /* @ Function: parseLine
    @ Arguments: The function gets char * token which is the first token of the line that we are about to parse and char *line which is the current line being parsed
-   @ Description: The function checks what is the current globalState, than checks what is the first token (an instruction, an operation, a label declaration...)
-    If the globalState is equal to firstRun, according to the first token, it finds out what kind of line is the current line and calls other function so they can handle the line.
-    If the globalState is equal to secondRun, according to the first token, it calls function to write the compiled memory.
+   @ Description: The function checks what is the current currentCompilerState, than checks what is the first token (an instruction, an operation, a label declaration...)
+    If the currentCompilerState is equal to firstRun, according to the first token, it finds out what kind of line is the current line and calls other function so they can handle the line.
+    If the currentCompilerState is equal to secondRun, according to the first token, it calls function to write the compiled memory.
     If it finds some errors, it yields (prints) the relevant error message.
     If the line turns out to be valid, it returns true, else it returns false.
 */
@@ -55,12 +55,14 @@ Bool parseLine(char *token, char *line);
 
 /* @ Function:handleSingleLine
    @ Arguments: This function gets char *line which is the current line that is being parsed.
-   @ Description: The function checks what is the current globalState, and by that decides how to split the line into tokens (what is the delimeter). 
+   @ Description: The function checks what is the current currentCompilerState, and by that decides how to split the line into tokens (what is the delimeter). 
    Than the function calls the function parseLine in order to check if there are errors in the line.
    Than its increases by 1 the number of line it parses (for the next line to come).
    Returns true if the line is valid and false if it isn't.
 */
 Bool handleSingleLine(char *line);
+
+verifyDefinitionArguments(char *line);
 
 /* @ Function:parseAssemblyCode
    @ Arguments: The function gets FILE *src which is a file after the pre proccesoring.

@@ -24,7 +24,7 @@ Bool isLegalMacroName(char *s)
 
 Bool isInstruction(char *s)
 {
-    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
+    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL || strstr(s, DEFINE) != NULL)
     {
         return True;
     }
@@ -34,8 +34,7 @@ Bool isInstruction(char *s)
 
 Bool isInstructionStrict(char *s)
 {
-
-    return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL))) ? True : False;
+    return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL) || !strcmp(s, DEFINE))) ? True : False;
 }
 
 Bool isRegistery(char *s)
@@ -143,6 +142,8 @@ int getInstructionType(char *s)
         return _TYPE_ENTRY;
     if (strstr(s, EXTERNAL) != NULL)
         return _TYPE_EXTERNAL;
+    if (strstr(s, DEFINE) != NULL)
+        return _TYPE_DEFINE;
     return False;
 }
 
@@ -185,7 +186,8 @@ char *getInstructionName(char *s)
         return ENTRY;
     if (strstr(s, EXTERNAL) != NULL)
         return EXTERNAL;
-
+    if (strstr(s, DEFINE) != NULL)
+        return DEFINE;
     return 0;
 }
 
@@ -256,6 +258,11 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
     }
 
     return True;
+}
+
+Bool isDefinition(char *s) {
+
+    return strchr(s, '=') && strstr(s, DEFINE) != NULL ? True : False;
 }
 
 AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {

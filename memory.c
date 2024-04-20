@@ -7,7 +7,6 @@ unsigned static ICF = 0;
 unsigned static DCF = 0;
 
 extern char *numToBin(int num);
-extern unsigned binaryStringToHexNumber(char binaryStr[4]);
 
 unsigned getDC() { return DC; }
 unsigned getIC() { return IC; }
@@ -104,7 +103,6 @@ void printWordBinary(unsigned index)
 
 void calcFinalAddrsCountersValues()
 {
-
     ICF = IC;
     DCF = ICF + DC;
     DC = IC;

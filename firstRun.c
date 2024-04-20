@@ -133,7 +133,7 @@ Bool validateOperandMatch(AddressMethod allowedAddrs, AddressMethodsEncoding act
 
 Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
 {
-    if (isInstruction(firstToken))
+    if (isInstruction(firstToken) && type != _TYPE_DEFINE)
     {
         if (type == _TYPE_DATA)
         {
@@ -170,7 +170,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
             }
         }
     }
-    else if (isLabelDeclaration(firstToken))
+    else if (isLabelDeclaration(firstToken) || isDefinition(firstToken))
     {
         int dataCounter = getDC();
         Bool isLabelNameAvailable;
@@ -179,15 +179,13 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
         if (!isLabelNameAvailable)
             yieldError(illegalSymbolNameAlreadyInUse);
 
-        if (((type == _TYPE_DATA && verifyDataArguments(line)) || (type == _TYPE_STRING && verifyStringArguments(line))) && isLabelNameAvailable)
+        if (((type == _TYPE_DATA && verifyDataArguments(line)) || (type == _TYPE_STRING && verifyStringArguments(line)) || 
+                type == _TYPE_DEFINE && verifyDefinitionArguments(line)) && isLabelNameAvailable)
         {
-
             return addSymbol(firstToken, dataCounter, 0, 1, 0, 0) ? True : False;
-        }
-        else
+        } else
             return False;
-    }
-    else
+    } else
         yieldError(undefinedOperation);
 
     return False;
@@ -221,12 +219,12 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
 
     else if (isOperation(nextToken))
     {
-        int icAddr = getIC();
+        int icAddress = getIC();
         char args[MAX_LINE_LEN] = {0};
         int offset = (int)(strlen(labelName) + strlen(nextToken) + 1);
         strcpy(args, &line[offset]);
         if (handleOperation(nextToken, args))
-            return addSymbol(labelName, icAddr, 1, 0, 0, 0) ? True : False;
+            return addSymbol(labelName, icAddress, 1, 0, 0, 0) ? True : False;
         else
             return False;
     }

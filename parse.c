@@ -149,9 +149,38 @@ Bool verifyStringArguments(char *line)
     return True;
 }
 
+Bool verifyDefinitionArguments(char *line) {
+
+    Bool isValid = True;
+    int size = 0, n = 0, num = 0;
+    char c = 0;
+    char args[MAX_LINE_LEN + 1] = {0}, *p;
+    line = strstr(line, DEFINE) + strlen(DEFINE);
+
+    strcpy(args, line);
+
+    p = strtok(line, "=");
+
+    size = strlen(p);
+    increaseDataCounter(size);
+
+    p = strtok(NULL, ", \t\n\f\r");
+    sscanf(p, "%d%n%c", &num, &n, &c);
+        if (c == '.' && n > 0)
+            isValid = yieldError(wrongArgumentTypeNotAnInteger);
+        num = atoi(p);
+        if (!num && *p != '0')
+            isValid = yieldError(expectedNumber);
+
+    if (isValid)
+        increaseDataCounter(size);
+
+    return isValid;
+}
+
 Bool parseLine(char *token, char *line)
 {
-    State (*globalState)() = &getGlobalState;
+    Step (*currentCompilerState)() = &getCompilerStep;
     Bool isValid = True;
 
     if (isComment(token))
@@ -173,16 +202,16 @@ Bool parseLine(char *token, char *line)
             rest++;
             sprintf(line, "%s%c%s", token, ' ', rest);
             strncpy(lineClone, line, strlen(line));
-            next = (*globalState)() == firstRun ? strtok(lineClone, " \t\n\f\r") : strtok(lineClone, ", \t\n\f\r");
+            next = (*currentCompilerState)() == firstRun ? strtok(lineClone, " \t\n\f\r") : strtok(lineClone, ", \t\n\f\r");
             return parseLine(next, line) && False;
         }
         else
         {
-            next = (*globalState)() == firstRun ? strtok(NULL, " \t\n\f\r") : strtok(NULL, ", \t\n\f\r");
+            next = (*currentCompilerState)() == firstRun ? strtok(NULL, " \t\n\f\r") : strtok(NULL, ", \t\n\f\r");
             if (!next)
                 return yieldError(emptyLabelDecleration);
 
-            if ((*globalState)() == firstRun)
+            if ((*currentCompilerState)() == firstRun)
                 return handleLabel(token, next, line) && isValid;
             else
                 return isValid && parseLine(next, line + strlen(token) + 1);
@@ -199,7 +228,7 @@ Bool parseLine(char *token, char *line)
             isValid = yieldError(missinSpaceAfterInstruction);
             token = getInstructionName(token);
         }
-        next = (*globalState)() == firstRun ? strtok(NULL, " \t\n\f\r") : strtok(NULL, ", \t\n\f\r");
+        next = (*currentCompilerState)() == firstRun ? strtok(NULL, " \t\n\f\r") : strtok(NULL, ", \t\n\f\r");
 
         if (isValid && next == NULL)
         {
@@ -211,7 +240,7 @@ Bool parseLine(char *token, char *line)
         else if (next != NULL)
         {
 
-            if ((*globalState)() == firstRun)
+            if ((*currentCompilerState)() == firstRun)
                 return handleInstruction(type, token, next, line) && isValid;
             else
             {
@@ -229,7 +258,7 @@ Bool parseLine(char *token, char *line)
     {
         char args[MAX_LINE_LEN] = {0};
         strcpy(args, (line + strlen(token)));
-        return (*globalState)() == firstRun ? handleOperation(token, args) : writeOperationBinary(token, args);
+        return (*currentCompilerState)() == firstRun ? handleOperation(token, args) : writeOperationBinary(token, args);
     }
 
     else
@@ -245,12 +274,12 @@ Bool parseLine(char *token, char *line)
 
 Bool handleSingleLine(char *line)
 {
-    State (*globalState)() = &getGlobalState;
+    Step (*currentCompilerState)() = &getCompilerStep;
     char lineCopy[MAX_LINE_LEN] = {0};
     Bool result = True;
     char *token;
     strcpy(lineCopy, line);
-    token = ((*globalState)() == firstRun) ? strtok(lineCopy, " \t\n\f\r") : strtok(lineCopy, ", \t\n\f\r");
+    token = ((*currentCompilerState)() == firstRun) ? strtok(lineCopy, " \t\n\f\r") : strtok(lineCopy, ", \t\n\f\r");
     result = parseLine(token, line);
     (*currentLineNumberPlusPlus)();
     return result;
@@ -258,23 +287,26 @@ Bool handleSingleLine(char *line)
 
 void parseAssemblyCode(FILE *src)
 {
-    State (*globalState)() = &getGlobalState;
-    void (*setState)(State) = &setGlobalState;
+    Step (*currentCompilerState)() = &getCompilerStep;
+    void (*setState)(Step) = &setCompilerStep;
     int c = 0, i = 0;
     char line[MAX_LINE_LEN] = {0};
     Bool isValidCode = True;
-    State nextState;
+    Step nextState;
     char *(*fileName)() = &getFileNamePath;
 
     (*resetCurrentLineCounter)();
-    if ((*globalState)() == secondRun)
-        printf("\n\n\nSecond Run:(%s)\n", (*fileName)());
-    else if ((*globalState)() == firstRun)
+    
+    if ((*currentCompilerState)() == firstRun) 
+    {
         printf("\n\n\nFirst Run:(%s)\n", (*fileName)());
+    } else if ((*currentCompilerState)() == secondRun) 
+    {
+        printf("\n\n\nSecond Run:(%s)\n", (*fileName)());
+    }
 
     while (((c = fgetc(src)) != EOF))
     {
-
         if (isspace(c) && i > 0)
             line[i++] = ' ';
 
@@ -301,7 +333,7 @@ void parseAssemblyCode(FILE *src)
     if (!isValidCode)
         nextState = assemblyCodeFailedToCompile;
     else
-        nextState = (*globalState)() == firstRun ? secondRun : exportFiles;
+        nextState = (*currentCompilerState)() == firstRun ? secondRun : exportFiles;
 
     (*resetCurrentLineCounter)();
     (*setState)(nextState);

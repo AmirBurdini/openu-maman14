@@ -1,6 +1,6 @@
 
 #define BINARY_WORD_SIZE 14
-#define MEMORY_START 0
+#define MEMORY_START 100
 #define REGS_SIZE 8
 #define OP_SIZE 16
 #define RAM_MEMORY_SIZE 4096
@@ -33,9 +33,11 @@
 #define ENTRY ".entry"
 #define EXTERNAL ".extern"
 #define DEFINE ".define"
-/* Given just random Numbers that will be different then 0*/
-#define _TYPE_DATA 11
-#define _TYPE_STRING 22
-#define _TYPE_ENTRY 33
-#define _TYPE_EXTERNAL 44
-#define _TYPE_CODE 55
+
+/* Given unique IDs */
+#define _TYPE_DATA 1001
+#define _TYPE_STRING 1002
+#define _TYPE_ENTRY 1003
+#define _TYPE_EXTERNAL 1004
+#define _TYPE_DEFINE 1005
+#define _TYPE_CODE 1006

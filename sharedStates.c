@@ -1,16 +1,16 @@
 #include "data.h"
 
-static State globalState = programStart;
+static Step currentCompilerState = programStart;
 static char *path;
 static unsigned currentLineNumber = 1;
 
-void setGlobalState(State newState)
+void setCompilerStep(Step newState)
 {
-    globalState = newState;
+    currentCompilerState = newState;
 }
-State getGlobalState()
+Step getCompilerStep()
 {
-    State current = globalState;
+    Step current = currentCompilerState;
     return current;
 }
 

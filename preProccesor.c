@@ -1,6 +1,6 @@
 #include "data.h"
-void (*setState)(State) = &setGlobalState;
-State (*globalState)() = &getGlobalState;
+void (*setState)(Step) = &setCompilerStep;
+Step (*currentCompilerState)() = &getCompilerStep;
 
 void parseMacros(char *line, char *token, FILE *src, FILE *target)
 {
@@ -91,7 +91,7 @@ void parseSourceFile(FILE *src, FILE *target)
         if (i >= MAX_LINE_LEN - 2 && !isspace(c))
             c = '\n';
 
-        if ((*globalState)() == assemblyCodeFailedToCompile)
+        if ((*currentCompilerState)() == assemblyCodeFailedToCompile)
             return;
 
         if (c == '\n')
@@ -118,6 +118,6 @@ void parseSourceFile(FILE *src, FILE *target)
             parseMacros(line, token, src, target);
     }
 
-    if ((*globalState)() != assemblyCodeFailedToCompile)
+    if ((*currentCompilerState)() != assemblyCodeFailedToCompile)
         (*setState)(firstRun);
 }

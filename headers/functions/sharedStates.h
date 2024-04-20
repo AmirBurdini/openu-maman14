@@ -23,17 +23,17 @@ that are defined in the file so they would be closed to its scope.
 ##########################################################################################################
 */
 
-void setGlobalState(State newState);
-/* @ Function: setGlobalState
-   @ Aruments: The function gets State new- the state the function will update
-   @ Description: The function updates the globalState to be the state it gets. This is the one of the only times we have an access to the global state (only through using the functions setGlobalState and getGlobalState)
+void setCompilerStep(Step nextStep);
+/* @ Function: setCompilerStep
+   @ Arguments: The function gets next Step - the state the function will update
+   @ Description: The function updates the currentCompilerState to be the state it gets. This is the one of the only times we have an access to the global state (only through using the functions setCompilerStep and getCompilerStep)
     The function doesn't return any value.
 */
 
-State getGlobalState();
-/* @ Function: getGlobalState
+Step getCompilerStep();
+/* @ Function: getCompilerStep
    @ Aruments: The function doesn't get any arguments.
-   @ Description: The function gets the global state. This is the one of the only times we have an access to the global state (only through using the functions setGlobalState and getGlobalState)
+   @ Description: The function gets the global state. This is the one of the only times we have an access to the global state (only through using the functions setCompilerStep and getCompilerStep)
     The function returns the current global state.
 */
 

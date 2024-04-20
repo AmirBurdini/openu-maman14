@@ -97,7 +97,7 @@ typedef enum
     secondRun,
     exportFiles,
     exitProgram
-} State;
+} Step;
 
 typedef enum
 {

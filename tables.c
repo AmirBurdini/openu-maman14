@@ -507,12 +507,14 @@ void freeTableItem(Item *item)
 void printMacroTable()
 {
     int i = 0;
-    printf("\n\t ~ MACRO TABLE ~ \n");
-    printf("\tname\tstart\tend");
+    printf("\n\t MACRO TABLE : \n");
+    printf("\tName\tStart\tEnd");
     while (i < HASHSIZE)
     {
-        if (macros[i] != NULL)
+        if (macros[i] != NULL) 
+        {
             printMacroItem(macros[i]);
+        }
         i++;
     }
     printf("\n\n");
