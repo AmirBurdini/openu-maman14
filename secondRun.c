@@ -7,8 +7,8 @@ Bool writeOperationBinary(char *operationName, char *args)
     const Operation *op = getOperationByName(operationName);
     char *first, *second;
     AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
-    first = strtok(args, ", \t\n\f\r");
-    second = strtok(NULL, ", \t\n\f\r");
+    first = strtok(args, ", _TOKEN_FORMAT");
+    second = strtok(NULL, ", _TOKEN_FORMAT");
     writeFirstWord(op);
 
     if (first && second && (detectOperandType(first, active, 0) && detectOperandType(second, active, 1)))
@@ -54,7 +54,7 @@ Bool writeDataInstruction(char *token)
     {
         num = atoi(token);
         addWord((A) | num, Data);
-        token = strtok(NULL, ", \t\n\f\r");
+        token = strtok(NULL, ", _TOKEN_FORMAT");
     }
     return True;
 }

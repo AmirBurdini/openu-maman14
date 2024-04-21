@@ -10,7 +10,6 @@
 /* Hash Table Hashsize (Result is currently 64)  */
 #define HASHSIZE ((RAM_MEMORY_SIZE / (MAX_LABEL_LEN + 1)) / 4)
 
-/* Masks for creation of to binary word memory image */
 #define A 00
 #define R 10
 #define E 01
@@ -41,3 +40,5 @@
 #define _TYPE_EXTERNAL 1004
 #define _TYPE_DEFINE 1005
 #define _TYPE_CODE 1006
+
+#define _TOKEN_FORMAT = "\t\n\f\r"
