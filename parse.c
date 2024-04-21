@@ -261,6 +261,11 @@ Bool parseLine(char *token, char *line)
         return (*currentCompilerState)() == firstRun ? handleOperation(token, args) : writeOperationBinary(token, args);
     }
 
+    else if (isDefinition(token)) {
+
+        /* add support for .define */
+    }
+
     else
     {
         if (strlen(token) > 1)

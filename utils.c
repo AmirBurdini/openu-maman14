@@ -150,7 +150,7 @@ AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {
 
 Bool isInstruction(char *s)
 {
-    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL || strstr(s, DEFINE) != NULL)
+    if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
     {
         return True;
     }
@@ -160,7 +160,7 @@ Bool isInstruction(char *s)
 
 Bool isInstructionStrict(char *s)
 {
-    return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL) || !strcmp(s, DEFINE))) ? True : False;
+    return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL))) ? True : False;
 }
 
 Bool isComment(char *s)
@@ -182,6 +182,11 @@ Bool isLabelDeclarationStrict(char *s)
 Bool isLabelDeclaration(char *s)
 {
     return strchr(s, ':') != NULL ? True : False;
+}
+
+Bool isDefinition(char *s) {
+
+    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
 }
 
 int getInstructionType(char *s)
@@ -306,7 +311,3 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
     return True;
 }
 
-Bool isDefinition(char *s) {
-
-    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
-}

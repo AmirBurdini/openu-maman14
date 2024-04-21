@@ -231,8 +231,7 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
             return addSymbol(labelName, icAddress, 1, 0, 0, 0) ? True : False;
         else
             return False;
-    }
-
+    } 
     else
         yieldError(illegalLabelUseExpectedOperationOrInstruction);
 

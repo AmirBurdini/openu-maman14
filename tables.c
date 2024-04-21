@@ -493,7 +493,7 @@ void printMacroTable()
 {
     int i = 0;
     printf("\n\t MACRO TABLE : \n");
-    printf("\tName\tStart\tEnd");
+    printf("\tName\t\tStart\t\tEnd");
     while (i < HASHSIZE)
     {
         if (macros[i] != NULL) 
@@ -519,7 +519,7 @@ void printSymbolTable()
     int i = 0;
 
     printf("\n\t\t ~ SYMBOL TABLE ~ \n");
-    printf("name\tvalue\tattributes");
+    printf("name\t\tvalue\t\tattributes");
 
     while (i < HASHSIZE)
     {
