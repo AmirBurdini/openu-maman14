@@ -102,7 +102,9 @@ void writeDirectOperandWord(char *labelName)
     if (isExternal(labelName))
     {
         addWord((E), Code);
+        /*
         updateExtPositionData(labelName);
+        */
     }
 
     else
@@ -121,20 +123,24 @@ void writeImmediateOperandWord(char *n)
 
 Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type)
 {
-    AddressMethod method = convertBinaryToAddressMethod(active[type]);
-    if (isRegistery(operand))
-        method.reg = True;
-    else if (isValidImmediateParamter(operand))
-        method.immediate = True;
-    else if (isValidIndexParameter(operand))
-        method.index = True;
-    else
+    if (isRegistery(operand)) {
+        active[type].firstDigit = 1;
+        active[type].secondDigit = 1;
+    } else if (isValidImmediateParamter(operand)) {
+        active[type].firstDigit = 0;
+        active[type].secondDigit = 0;
+    }
+    else if (isValidIndexParameter(operand)) {
+        active[type].firstDigit = 0;
+        active[type].secondDigit = 1;
+    } else
     {
         if (isSymbolExist(operand))
         {
             if (isEntry(operand) && !isNonEmptyEntry(operand))
                 return yieldError(entryDeclaredButNotDefined);
-            method.direct = True;
+            active[type].firstDigit = 1;
+            active[type].secondDigit = 0;
         }
         else
             return yieldError(labelNotExist);

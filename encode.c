@@ -44,7 +44,7 @@ char *processLine(char *line) {
     }
 }
 
-FILE *convertFile(const char *inputFileName) {
+FILE *convertFile(FILE *inputFileName) {
 
     FILE *inputFile = fopen(inputFileName, "r");
     FILE *outputFile = fopen("output.txt", "w");
