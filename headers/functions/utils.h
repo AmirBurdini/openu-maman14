@@ -15,32 +15,6 @@ with parsing the assembly code.
 ##########################################################################################################
 */
 
-Bool isMacroOpening(char *s);
-/* @ Function: isMacroOpening
-   @ Arguments: The function gets a char *s, the string it checks whether it is the opening of a macro or not.
-   @ Description: The function checks if char *s is equal to "macro", returns true if it is, and false if it isn't
-*/
-
-Bool isMacroClosing(char *s);
-/* @ Function: isMacroClosing
-   @ Arguments: The function gets a char *s, the string it checks whether it is the closing of a macro or not.
-   @ Description: The function checks if char *s is equal to "endm", returns true if it is, and false if it isn't
-*/
-
-Bool isPossiblyUseOfMacro(char *s);
-/* @ Function: isPossiblyUseOfMacro
-   @ Arguments: The function gets a char *s, the string it checks whether it can be a macro or not.
-   @ Description: The function checks if char *s can be a macro, by illuminating the other things it can be (an instruction, a label...).
-   Returns true if it could be a macro and false if it couldn't.
-*/
-
-Bool isLegalMacroName(char *s);
-/* @ Function: isLegalMacroName
-   @ Arguments: The function gets a char *s, the string it checks whether it is a legal macro name or not.
-   @ Description: The function checks if char *s is a legal macro name by verifying that it's name is not a name of an instruction or an operation.
-    Returns true if it is a legal macro name and false if it is not.
-*/
-
 Bool isInstruction(char *s);
 /* @ Function: isInstruction
    @ Arguments: The function gets a char *s, the string it checks whether it or a part of it is an instruction or not.
@@ -53,35 +27,6 @@ Bool isInstructionStrict(char *s);
    @ Arguments: The function gets a char *s, the string it checks whether it is an instruction or not.
    @ Description: The function checks if char *s is an instruction by comparing it to the name of the instructions.
    Returns true if it is an instruction, and false if it isn't.
-*/
-
-Bool isRegistery(char *s);
-/* @ Function: isRegistery
-   @ Arguments: The function gets a char *s, the string it checks whether it is a register or not.
-   @ Description: The function checks if char *s is a legal register by checking if the first char is 'r' and theothers are int numbers between 0-15.
-   Returns true if it is a register, and false if it isn't.
-*/
-
-Bool isValidImmediateParamter(char *s);
-/* @ Function: isValidImmediateParamter
-   @ Arguments: The function gets a char *s, the string it checks whether it is a valid immediate parameter or not.
-   @ Description: The function checks if char *s is a valid immediate parameter by verifying the first token us a -, a + or a digit and the other vhars are digits.
-   Returns true if it is a valid immediate parameter, and false if it isn't.
-
-*/
-
-Bool isValidIndexParameter(char *s);
-/* @ Function: isValidIndexParamter
-   @ Arguments: The function gets a char *s, the string it checks whether it is a valid index parameter or not.
-   @ Description:The function checks if char *s is a valid index parameter by checkin if it is a label and a register (between 10-15) in parenthesis afterwards
-   Returns true if it is a valid index parameter, and false if it isn't.
-*/
-
-Bool isIndexParameter(char *s);
-/* @ Function: isIndexParameter
-   @ Arguments: The function gets a char *s, the string it checks whether it is a index parameter or not.
-   @ Description:The function checks if char *s is a valid index parameter by checkin if it is a label and a register (any register, not strict to 10-15) in parenthesis afterwards
-   Returns true if it is a valid index parameter, and false if it isn't.
 */
 
 Bool isComment(char *s);
@@ -118,13 +63,6 @@ int getInstructionType(char *s);
     Returns the right instruction if it is an instruction, and false(0) if it isn't
 */
 
-int getRegisteryNumber(char *s);
-/* @ Function: getRegisteryNumber
-    @ Arguments: The function gets a char *s, the string it checks from what is the number of the register.
-    @ Description: The function checks what is the number of the register by checking the number at the end of the string
-    Returns the number of the register.
-*/
-
 char *getInstructionName(char *s);
 
 char *getInstructionNameByType(int type);
@@ -149,5 +87,3 @@ Bool verifyLabelNamingAndPrintErrors(char *s);
 */
 
 Bool isDefinition(char *s);
-
-AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method);
