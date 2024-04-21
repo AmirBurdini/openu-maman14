@@ -58,12 +58,13 @@ Bool isValidImmediateParamter(char *s)
     int i, len = strlen(s);
     if (s[0] != '#')
         return False;
-    if (s[1] == '-' && !isdigit(s[2]))
-        return False;
-
+    
     if (isLabelNameAlreadyTaken(s[1], Symbol)) {
         return True;
     }
+
+    if (s[1] == '-' && !isdigit(s[2]))
+        return False;
 
     for (i = 2; i < len; i++)
         if (!isdigit(s[i]))
