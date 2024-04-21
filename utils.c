@@ -74,8 +74,8 @@ Bool isValidImmediateParamter(char *s)
 Bool isIndexParameter(char *s)
 {
     int len = strlen(s);
-    char *opening = opening = strchr(s, '[');
-    char *opening = opening = strchr(s, ']');
+    char *opening = strchr(s, '[');
+    char *closing = strchr(s, ']');
     Bool result = True;
     if (len < 4)
         return False;

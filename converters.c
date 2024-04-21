@@ -105,7 +105,7 @@ char *numToBin(int num)
 
 char *decimalToBase4(int number) {
 
-    // Calculate maximum length needed for base-4 representation
+    /* Calculate maximum length needed for base-4 representation */ 
     int temp = abs(number);
     int length = 0;
     int remainder;
@@ -115,10 +115,10 @@ char *decimalToBase4(int number) {
         temp /= 4;
     }
 
-    // Allocate memory for the base-4 representation
+    /*  Allocate memory for the base-4 representation */
     char* result = (char*)malloc((length) * sizeof(char));
 
-    // Convert number to base-4
+    /* Convert number to base-4 */ 
     temp = abs(number);
     index = 0;
     while (temp > 0) {

@@ -72,7 +72,7 @@ Bool writeStringInstruction(char *s)
     return True;
 }
 
-//Refactor needed
+/* Refactor needed */
 void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2], const Operation *op)
 {
     AddressMethod sourceMethod = convertBinaryToAddressMethod(active[0]);
