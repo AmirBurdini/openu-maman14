@@ -180,8 +180,11 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
         if (!isLabelNameAvailable)
             yieldError(illegalSymbolNameAlreadyInUse);
 
-        if (((type == _TYPE_DATA && verifyDataArguments(line)) || (type == _TYPE_STRING && verifyStringArguments(line)) || 
-                type == _TYPE_DEFINE && verifyDefinitionArguments(line)) && isLabelNameAvailable)
+        if (((type == _TYPE_DATA && verifyDataArguments(line)) || 
+     (type == _TYPE_STRING && verifyStringArguments(line)) || 
+     (type == _TYPE_DEFINE && verifyDefinitionArguments(line))) && 
+    isLabelNameAvailable)
+
         {
             return addSymbol(firstToken, dataCounter, 0, 1, 0, 0) ? True : False;
         } else
