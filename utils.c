@@ -1,27 +1,5 @@
 #include "data.h"
 
-const char *regs[REGS_SIZE] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
-
-Bool isMacroOpening(char *s)
-{
-    return !strcmp(s, "mer") ? True : False;
-}
-
-Bool isMacroClosing(char *s)
-{
-    return !strcmp(s, "endmer") ? True : False;
-}
-
-Bool isPossiblyUseOfMacro(char *s)
-{
-    return !isLabelDeclaration(s) && !isOperation(s) && !isComment(s) && !isInstructionStrict(s) && !isMacroClosing(s) && !isMacroOpening(s);
-}
-
-Bool isLegalMacroName(char *s)
-{
-    return !isInstructionStrict(s) && !isOperation(s) ? True : False;
-}
-
 Bool isInstruction(char *s)
 {
     if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL || strstr(s, DEFINE) != NULL)
@@ -35,92 +13,6 @@ Bool isInstruction(char *s)
 Bool isInstructionStrict(char *s)
 {
     return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL) || !strcmp(s, DEFINE))) ? True : False;
-}
-
-Bool isRegistery(char *s)
-{
-    int len = strlen(s);
-    int i = 0;
-    if (s[0] == 'r' && len == 2)
-    {
-        while (i < REGS_SIZE)
-        {
-            if ((strcmp(regs[i], s) == 0))
-                return True;
-            i++;
-        }
-    }
-    return False;
-}
-
-Bool isValidImmediateParamter(char *s)
-{
-    int i, len = strlen(s);
-    if (s[0] != '#')
-        return False;
-    
-    if (isLabelNameAlreadyTaken(s[1], Symbol)) {
-        return True;
-    }
-
-    if (s[1] == '-' && !isdigit(s[2]))
-        return False;
-
-    for (i = 2; i < len; i++)
-        if (!isdigit(s[i]))
-            return False;
-    return True;
-}
-
-Bool isIndexParameter(char *s)
-{
-    int len = strlen(s);
-    char *opening = strchr(s, '[');
-    char *closing = strchr(s, ']');
-    Bool result = True;
-    if (len < 4)
-        return False;
-    if (opening == NULL || closing == NULL)
-        return False;
-    if (closing < opening || (s[len - 1] != ']'))
-        return False;
-    if (isLabelNameAlreadyTaken(opening + 1, Symbol)) {
-        return True;
-    }
-    else
-    {
-        opening++;
-        *closing = '\0';
-        if (!isRegistery(opening))
-            result = False;
-        *closing = ']';
-    }
-    return result;
-}
-
-Bool isValidIndexParameter(char *s)
-{
-    int len = strlen(s);
-    Bool result = True;
-    if (len < 6)
-        return False;
-
-    else if (!(s[len - 1] == ']' && s[len - 4] == 'r' && s[len - 5] == '['))
-        return False;
-    else
-    {
-        char *opening = 0;
-        opening = strchr(s, '[');
-        opening++;
-        s[len - 1] = '\0';
-
-        if (isRegistery(opening) && getRegisteryNumber(opening) < 10)
-        {
-            result = False;
-        }
-        s[len - 1] = ']';
-    }
-    return result;
 }
 
 Bool isComment(char *s)
@@ -159,12 +51,6 @@ int getInstructionType(char *s)
     return False;
 }
 
-int getRegisteryNumber(char *s)
-{
-    s++;
-    return atoi(s);
-}
-
 char *getInstructionNameByType(int type)
 {
     switch (type)
@@ -180,6 +66,9 @@ char *getInstructionNameByType(int type)
 
     case _TYPE_EXTERNAL:
         return strcat(EXTERNAL, "\0");
+
+    case _TYPE_DEFINE:
+        return strcat(DEFINE, "\0");
 
     default:
         break;
@@ -274,31 +163,5 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
 
 Bool isDefinition(char *s) {
 
-    return strchr(s, '=') && strstr(s, DEFINE) != NULL ? True : False;
-}
-
-AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {
-    
-    int decimal = 1 *method.firstDigit + 2 *method.secondDigit;
-    AddressMethod result = {False, False, False, False};
-
-    switch (decimal)
-    {
-    case 0:
-        result.immediate = True;
-        break;
-    case 1:
-        result.direct = True;
-        break;
-    case 2:
-        result.index = True;
-        break;
-    case 3:
-        result.reg = True;
-        break;
-    default:
-        break;
-    }
-
-    return result;
+    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
 }

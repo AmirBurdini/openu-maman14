@@ -3,6 +3,10 @@
 #include "operation.h"
 
 #include "utils.h"
+#include "macroHandler.h"
+#include "registersHandler.h"
+#include "addressMethodHandler.h"
+
 #include "errors.h"
 #include "converters.h"
 #include "tables.h"
