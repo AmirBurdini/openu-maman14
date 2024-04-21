@@ -42,3 +42,4 @@
 #define _TYPE_CODE 1006
 
 #define _TOKEN_FORMAT = "\t\n\f\r"
+#define _TOKEN_FORMAT_SECOND = "," + _TOKEN_FORMAT

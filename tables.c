@@ -519,7 +519,7 @@ void printSymbolTable()
     int i = 0;
 
     printf("\n\t\t ~ SYMBOL TABLE ~ \n");
-    printf("name\tvalue\tbase\toffset\tattributes");
+    printf("name\tvalue\tattributes");
 
     while (i < HASHSIZE)
     {

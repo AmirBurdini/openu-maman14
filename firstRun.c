@@ -12,13 +12,13 @@ Bool handleOperation(char *operationName, char *args)
     if (*args)
         areOperandsLegal = verifyCommaSyntax(args);
 
-    first = strtok(args, ", _TOKEN_FORMAT");
+    first = strtok(args, _TOKEN_FORMAT_SECOND);
     if (first)
     {
-        second = strtok(NULL, ", _TOKEN_FORMAT");
+        second = strtok(NULL, _TOKEN_FORMAT_SECOND);
         if (second)
         {
-            extra = strtok(NULL, ", _TOKEN_FORMAT");
+            extra = strtok(NULL, _TOKEN_FORMAT_SECOND);
             if (extra)
                 return yieldError(extraOperandsPassed);
         }
@@ -148,7 +148,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
             if (nextTokens)
             {
                 char *labelName = cloneString(nextTokens);
-                nextTokens = strtok(NULL, " _TOKEN_FORMAT");
+                nextTokens = strtok(NULL, _TOKEN_FORMAT);
                 if (nextTokens)
                 {
                     yieldError(illegalApearenceOfCharactersInTheEndOfTheLine);
@@ -211,7 +211,7 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
 
         if (instruction == _TYPE_ENTRY || instruction == _TYPE_EXTERNAL)
         {
-            char *next = strtok(NULL, " _TOKEN_FORMAT");
+            char *next = strtok(NULL, _TOKEN_FORMAT);
             if (next)
                 return handleInstruction(instruction, nextToken, next, line) && isValid;
             else
