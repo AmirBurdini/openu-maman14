@@ -70,8 +70,16 @@ FILE *convertFile(const char *inputFileName) {
         fprintf(outputFile, "%s\n", line); 
     }
 
+    fseek(inputFile, 0, SEEK_SET);
+    fseek(outputFile, 0, SEEK_SET);
+
+
+    while (fgets(line, sizeof(line), outputFile)) {
+        fprintf(inputFile, "%s", line);
+    }
+
     fclose(inputFile);
     fclose(outputFile);
 
-    return outputFile; 
+    return inputFile; 
 }
