@@ -29,7 +29,7 @@ void parseMacros(char *line, char *token, FILE *src, FILE *target)
 
     if (isMacroOpening(token))
     {
-        next = strtok(NULL, _TOKEN_FORMAT);
+        next = strtok(NULL, "\t\n\f\r");
 
         if (next == NULL)
         {
@@ -99,7 +99,7 @@ void parseSourceFile(FILE *src, FILE *target)
             if (i > 0)
             {
                 strncpy(lineClone, line, i);
-                token = strtok(lineClone, _TOKEN_FORMAT);
+                token = strtok(lineClone, "\t\n\f\r");
                 if (token != NULL)
                     parseMacros(line, token, src, target);
 
@@ -113,7 +113,7 @@ void parseSourceFile(FILE *src, FILE *target)
     if (i > 0)
     {
         strcpy(lineClone, line);
-        token = strtok(lineClone, _TOKEN_FORMAT);
+        token = strtok(lineClone, "\t\n\f\r");
         if (token != NULL)
             parseMacros(line, token, src, target);
     }
