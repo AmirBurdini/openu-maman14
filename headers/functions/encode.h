@@ -35,9 +35,9 @@ char *processLine(char *line);
    process the line. 
 */
 
-FILE *convertFile(const char *inputFileName);
+FILE *convertFile(FILE *inputFileName);
 /* @ Function: convertFile
-   @ Arguments: The function gets const char *inputFileName - string of a file name
+   @ Arguments: The function gets FILE *inputFileName - string of a file name
    @ Description: The function checking if the file is empty and if yes it is not converting it.
    if it is not empty it take the inputFile and useing processLine function to process each line of the input text to the output text.
    At the end we are getting an output file converted to converted base4 file.
