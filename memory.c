@@ -117,6 +117,7 @@ void writeMemoryImageToObFile(FILE *fp)
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
     for (i = 0; i < totalSize; i++)
     {
-        fprintf(fp, "\n", MEMORY_START + i, *encodeNumber(&binaryImg[i]));
+        fprintf(fp, "\n", MEMORY_START + i, (&binaryImg[i]));
     }
+    convertFile(fp);
 }

@@ -49,7 +49,7 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEnco
     char *operand- the operands, and type- the type of the operand.
    @ Description: The function checks if the operand has the right addressing mrhod, returns true if it does, and false if it doesn't.
    */
-Bool validateOperandMatch(AddressMethodsEncoding allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type);
+Bool validateOperandMatch(AddressMethod allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type);
 
 Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line);
 /* @ Function: Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
