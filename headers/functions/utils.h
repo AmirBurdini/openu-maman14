@@ -90,12 +90,6 @@ Bool isComment(char *s);
    @ Description: The function checks if char *s is a comment by checking if it's first char is ;.
    Returns true if it is a comment, and false if it isn't.
 */
-Bool isOperation(char *s);
-/* @ Function: isOperation
-   @ Arguments: The function gets a char *s, the string it checks whether it is an operation or not.
-   @ Description: The function checks if char *s is an operation, by checking if it is equal to one of the names of the operations, using getOperationByName.
-   Returns true if it is an operation, and false if it isn't.
-*/
 
 Bool isLabelDeclarationStrict(char *s);
 /* @ Function: isLabelDeclarationStrict

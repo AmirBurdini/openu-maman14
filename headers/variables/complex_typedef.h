@@ -37,7 +37,7 @@ typedef struct
 typedef struct
 {
     unsigned int opcode : 4; /*the operation code */
-    char keyword[3];        /*the keyword for the operation name*/
+    char keyword[4];        /*the keyword for the operation name*/
     AddressMethod src; /*legal addressing mehods for the source operand*/
     AddressMethod des; /*legal addressing mehods for the destination operand*/
 } Operation;

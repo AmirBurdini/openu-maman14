@@ -16,12 +16,12 @@ Bool isMacroClosing(char *s)
 
 Bool isPossiblyUseOfMacro(char *s)
 {
-    return !isLabelDeclaration(s) && !isOperation(s) && !isComment(s) && !isInstructionStrict(s) && !isMacroClosing(s) && !isMacroOpening(s);
+    return !isLabelDeclaration(s) && !isOperationName(s) && !isComment(s) && !isInstructionStrict(s) && !isMacroClosing(s) && !isMacroOpening(s);
 }
 
 Bool isLegalMacroName(char *s)
 {
-    return !isInstructionStrict(s) && !isOperation(s) ? True : False;
+    return !isInstructionStrict(s) && !isOperationName(s) ? True : False;
 }
 
 /* registers handling*/
@@ -222,13 +222,6 @@ Bool isComment(char *s)
 {
     s = trimFromLeft(s);
     return s[0] == ';' ? True : False;
-}
-
-/* operation*/
-
-Bool isOperation(char *s)
-{
-    return (getOperationByName(s) != NULL) ? True : False;
 }
 
 /* label*/

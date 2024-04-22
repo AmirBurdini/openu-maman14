@@ -252,9 +252,7 @@ Bool parseLine(char *token, char *line)
                     return True;
             }
         }
-    }
-
-    else if (isOperation(token))
+    } else if (isOperationName(token))
     {
         char args[MAX_LINE_LEN] = {0};
         strcpy(args, (line + strlen(token)));
@@ -285,7 +283,6 @@ Bool handleSingleLine(char *line)
     char *token;
     strcpy(lineCopy, line);
     token = ((*currentCompilerState)() == firstRun) ? strtok(lineCopy, _TOKEN_FORMAT) : strtok(lineCopy, _TOKEN_FORMAT_SECOND);
-    
     result = parseLine(token, line);
     (*currentLineNumberPlusPlus)();
     return result;
