@@ -69,55 +69,25 @@ Bool isValidImmediateParamter(char *s)
     return True;
 }
 
-Bool isIndexParameter(char *s)
+Bool isValidIndexParameter(char *s)
 {
-    int len = strlen(s);
+    int i, len = strlen(s);
     char *opening = strchr(s, '[');
     char *closing = strchr(s, ']');
-    Bool result = True;
-    if (len < 4)
-        return False;
     if (opening == NULL || closing == NULL)
         return False;
     if (closing < opening || (s[len - 1] != ']'))
         return False;
+
+    /* handle definitions */
     if (isLabelNameAlreadyTaken(opening + 1, Symbol)) {
         return True;
     }
-    else
-    {
-        opening++;
-        *closing = '\0';
-        if (!isRegistery(opening))
-            result = False;
-        *closing = ']';
-    }
-    return result;
-}
 
-Bool isValidIndexParameter(char *s)
-{
-    int len = strlen(s);
-    Bool result = True;
-    if (len < 6)
-        return False;
-
-    else if (!(s[len - 1] == ']' && s[len - 4] == 'r' && s[len - 5] == '['))
-        return False;
-    else
-    {
-        char *opening = 0;
-        opening = strchr(s, '[');
-        opening++;
-        s[len - 1] = '\0';
-
-        if (isRegistery(opening) && getRegisteryNumber(opening) < 10)
-        {
-            result = False;
-        }
-        s[len - 1] = ']';
-    }
-    return result;
+    for (i = opening + 1; opening < len - 1; i++)
+        if (!isdigit(&i))
+            return False;
+    return True;
 }
 
 AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {
@@ -312,4 +282,7 @@ Bool isDefinition(char *s) {
     return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
 }
 
+Bool isDefinitionStrict(char *s) {
 
+    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
+}

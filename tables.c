@@ -493,7 +493,7 @@ void printMacroTable()
 {
     int i = 0;
     printf("\n\t MACRO TABLE : \n");
-    printf("\tName\t\tStart\t\tEnd");
+    printf("\tName\tStart\tEnd");
     while (i < HASHSIZE)
     {
         if (macros[i] != NULL) 

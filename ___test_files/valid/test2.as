@@ -1,15 +1,22 @@
 ; file ps.am
 .entry LIST
 .extern W
+MAIN: add r3, LIST
 LOOP: prn #48
 mcr m1
- clr r6
- prn r6
+ inc r6
+ mov r3, W
 endmcr
+lea STR, r6
+inc r6
+mov r3, W
+sub r1, r4
 bne END
-bne END[r15]
+cmp val1, #-6
+bne END[7]
 dec K
 .entry MAIN
+sub LOOP[1] ,r14
 END: hlt
 STR: .string "abcd"
 LIST: .data 6, -9

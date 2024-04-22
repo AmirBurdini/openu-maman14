@@ -73,7 +73,7 @@ typedef enum
     emptyStringDeclatretion,
     emptyLabelDecleration,
     undefinedLabelDeclaretion,
-    registeryIndexOperandTypeIfOutOfAllowedRegisteriesRange
+    IndexOperandParameterNoNumber
 
 } Error;
 

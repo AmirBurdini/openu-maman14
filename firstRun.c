@@ -94,14 +94,14 @@ Bool parseOperands(char *src, char *des, const Operation *op, AddressMethodsEnco
 
 Bool validateOperandMatch(AddressMethod allowedAddrs, AddressMethodsEncoding active[2], char *operand, int type)
 {
-    Bool isAny = isValidImmediateParamter(operand) || isValidIndexParameter(operand) || isRegistery(operand) || verifyLabelNaming(operand) || isIndexParameter(operand);
+    Bool isAny = isValidImmediateParamter(operand) || isValidIndexParameter(operand) || isRegistery(operand) || verifyLabelNaming(operand);
     Bool isImmediate = isValidImmediateParamter(operand);
     Bool isDirectIndex = !isImmediate && isValidIndexParameter(operand);
     Bool isReg = !isDirectIndex && !isImmediate && isRegistery(operand);
     Bool isDirect = !isReg && !isDirectIndex && !isImmediate && verifyLabelNaming(operand);
 
-    if (isIndexParameter(operand) && !isDirectIndex)
-        return yieldError(registeryIndexOperandTypeIfOutOfAllowedRegisteriesRange);
+    if (isValidIndexParameter(operand) && !isDirectIndex)
+        return yieldError(IndexOperandParameterNoNumber);
 
     if (!isAny)
         return type == 1 ? yieldError(illegalInputPassedAsOperandDesOperand) : yieldError(illegalInputPassedAsOperandSrcOperand);

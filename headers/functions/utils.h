@@ -71,14 +71,7 @@ Bool isValidImmediateParamter(char *s);
 */
 
 Bool isValidIndexParameter(char *s);
-/* @ Function: isValidIndexParamter
-   @ Arguments: The function gets a char *s, the string it checks whether it is a valid index parameter or not.
-   @ Description:The function checks if char *s is a valid index parameter by checkin if it is a label and a register (between 10-15) in parenthesis afterwards
-   Returns true if it is a valid index parameter, and false if it isn't.
-*/
-
-Bool isIndexParameter(char *s);
-/* @ Function: isIndexParameter
+/* @ Function: isValidIndexParameter
    @ Arguments: The function gets a char *s, the string it checks whether it is a index parameter or not.
    @ Description:The function checks if char *s is a valid index parameter by checkin if it is a label and a register (any register, not strict to 10-15) in parenthesis afterwards
    Returns true if it is a valid index parameter, and false if it isn't.
@@ -143,5 +136,7 @@ Bool verifyLabelNamingAndPrintErrors(char *s);
 */
 
 Bool isDefinition(char *s);
+
+Bool isDefinitionStrict(char *s);
 
 AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method);
