@@ -41,5 +41,5 @@
 #define _TYPE_DEFINE 1005
 #define _TYPE_CODE 1006
 
-#define _TOKEN_FORMAT "\t\n\f\r"
+#define _TOKEN_FORMAT " \t\n\f\r"
 #define _TOKEN_FORMAT_SECOND ", \t\n\f\r"

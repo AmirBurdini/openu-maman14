@@ -148,6 +148,8 @@ AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method) {
 
 /* word handling*/
 
+/* instruction*/
+
 Bool isInstruction(char *s)
 {
     if (strstr(s, DATA) != NULL || strstr(s, STRING) != NULL || strstr(s, ENTRY) != NULL || strstr(s, EXTERNAL) != NULL)
@@ -161,32 +163,6 @@ Bool isInstruction(char *s)
 Bool isInstructionStrict(char *s)
 {
     return ((!strcmp(s, DATA) || !strcmp(s, STRING) || !strcmp(s, ENTRY) || !strcmp(s, EXTERNAL))) ? True : False;
-}
-
-Bool isComment(char *s)
-{
-    s = trimFromLeft(s);
-    return s[0] == ';' ? True : False;
-}
-
-Bool isOperation(char *s)
-{
-    return (getOperationByName(s) != NULL) ? True : False;
-}
-
-Bool isLabelDeclarationStrict(char *s)
-{
-    return s[strlen(s) - 1] == ':' ? True : False;
-}
-
-Bool isLabelDeclaration(char *s)
-{
-    return strchr(s, ':') != NULL ? True : False;
-}
-
-Bool isDefinition(char *s) {
-
-    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
 }
 
 int getInstructionType(char *s)
@@ -237,9 +213,34 @@ char *getInstructionName(char *s)
         return ENTRY;
     if (strstr(s, EXTERNAL) != NULL)
         return EXTERNAL;
-    if (strstr(s, DEFINE) != NULL)
-        return DEFINE;
     return 0;
+}
+
+/* comment */
+
+Bool isComment(char *s)
+{
+    s = trimFromLeft(s);
+    return s[0] == ';' ? True : False;
+}
+
+/* operation*/
+
+Bool isOperation(char *s)
+{
+    return (getOperationByName(s) != NULL) ? True : False;
+}
+
+/* label*/
+
+Bool isLabelDeclarationStrict(char *s)
+{
+    return s[strlen(s) - 1] == ':' ? True : False;
+}
+
+Bool isLabelDeclaration(char *s)
+{
+    return strchr(s, ':') != NULL ? True : False;
 }
 
 Bool verifyLabelNaming(char *s)
@@ -310,4 +311,12 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
 
     return True;
 }
+
+/* definition */
+
+Bool isDefinition(char *s) {
+
+    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
+}
+
 

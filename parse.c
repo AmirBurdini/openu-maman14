@@ -15,14 +15,14 @@ Bool verifyDataArguments(char *line)
     char args[MAX_LINE_LEN + 1] = {0}, *p;
     line = strstr(line, DATA) + strlen(DATA);
 
-    /*pointer p points to the first char's position coming after the .data
+    /* we make the pointer p to point on the position of the first character coming sfter the .data
      instruction within the full line, so that p will point on the begining of the arguments string*/
 
-    /*copies the string of arguments pointer by p into the args local string we will use for parsing.*/
+    /*copies the string of arguments pointer by p into the args local string we will use for parsing*/
     strcpy(args, line);
 
     isValid = verifyCommaSyntax(args);
-    p = strtok(line, ", \t\n\f\r");
+    p = strtok(line, _TOKEN_FORMAT_SECOND);
 
     while (p != NULL)
     {
@@ -35,7 +35,7 @@ Bool verifyDataArguments(char *line)
 
         n = num = c = 0;
         size++;
-        p = strtok(NULL, ", \t\n\f\r");
+        p = strtok(NULL, _TOKEN_FORMAT_SECOND);
     }
 
     if (isValid)
@@ -164,7 +164,7 @@ Bool verifyDefinitionArguments(char *line) {
     size = strlen(p);
     increaseDataCounter(size);
 
-    p = strtok(NULL, ", \t\n\f\r");
+    p = strtok(NULL, _TOKEN_FORMAT_SECOND);
     sscanf(p, "%d%n%c", &num, &n, &c);
         if (c == '.' && n > 0)
             isValid = yieldError(wrongArgumentTypeNotAnInteger);
@@ -202,12 +202,12 @@ Bool parseLine(char *token, char *line)
             rest++;
             sprintf(line, "%s%c%s", token, ' ', rest);
             strncpy(lineClone, line, strlen(line));
-            next = (*currentCompilerState)() == firstRun ? strtok(lineClone, "\t\n\f\r") : strtok(lineClone, ", \t\n\f\r");
+            next = (*currentCompilerState)() == firstRun ? strtok(lineClone, _TOKEN_FORMAT) : strtok(lineClone, _TOKEN_FORMAT_SECOND);
             return parseLine(next, line) && False;
         }
         else
         {
-            next = (*currentCompilerState)() == firstRun ? strtok(NULL, "\t\n\f\r") : strtok(NULL, ", \t\n\f\r");
+            next = (*currentCompilerState)() == firstRun ? strtok(NULL, _TOKEN_FORMAT) : strtok(NULL, _TOKEN_FORMAT_SECOND);
             if (!next)
                 return yieldError(emptyLabelDecleration);
 
@@ -228,7 +228,7 @@ Bool parseLine(char *token, char *line)
             isValid = yieldError(missinSpaceAfterInstruction);
             token = getInstructionName(token);
         }
-        next = (*currentCompilerState)() == firstRun ? strtok(NULL, "\t\n\f\r") : strtok(NULL, ", \t\n\f\r");
+        next = (*currentCompilerState)() == firstRun ? strtok(NULL, _TOKEN_FORMAT) : strtok(NULL, _TOKEN_FORMAT_SECOND);
 
         if (isValid && next == NULL)
         {
@@ -284,7 +284,9 @@ Bool handleSingleLine(char *line)
     Bool result = True;
     char *token;
     strcpy(lineCopy, line);
-    token = ((*currentCompilerState)() == firstRun) ? strtok(lineCopy, "\t\n\f\r") : strtok(lineCopy, ", \t\n\f\r");
+    token = ((*currentCompilerState)() == firstRun) ? strtok(lineCopy, _TOKEN_FORMAT) : strtok(lineCopy, _TOKEN_FORMAT_SECOND);
+    
+    printf("%p", token);
     result = parseLine(token, line);
     (*currentLineNumberPlusPlus)();
     return result;
