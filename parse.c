@@ -286,7 +286,6 @@ Bool handleSingleLine(char *line)
     strcpy(lineCopy, line);
     token = ((*currentCompilerState)() == firstRun) ? strtok(lineCopy, _TOKEN_FORMAT) : strtok(lineCopy, _TOKEN_FORMAT_SECOND);
     
-    printf("%p", token);
     result = parseLine(token, line);
     (*currentLineNumberPlusPlus)();
     return result;
