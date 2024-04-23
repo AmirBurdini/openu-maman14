@@ -120,9 +120,8 @@ Item *install(char *name, ItemType type)
             np->val.s.attrs.entry = 0;
             np->val.s.attrs.external = 0;
             np->val.s.attrs.data = 0;
-            np->val.s.base = 0;
+            np->val.s.attrs.definition = 0;
             np->val.s.value = 0;
-            np->val.s.offset = 0;
         }
         else if (type == Macro)
         {
@@ -141,10 +140,8 @@ Item *install(char *name, ItemType type)
     return np;
 }
 
-Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal)
+Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal, unsigned isDefinition)
 {
-    unsigned base;
-    unsigned offset;
     Item *p;
 
     if (name[strlen(name) - 1] == ':')
@@ -153,20 +150,22 @@ Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, uns
     if (!verifyLabelNamingAndPrintErrors(name))
         return False;
     p = lookup(name, Symbol);
-    if (p != NULL)
-        return updateSymbol(p, value, isCode, isData, isEntry, isExternal);
+    if (p != NULL) {
+        if (isDefinition) {
+           yieldError(illegalSymbolNameAlreadyInUse);
+        } else {
+            return updateSymbol(p, value, isCode, isData, isEntry, isExternal);
+        }
+    }
     else
     {
         p = install(name, Symbol);
-        offset = value % 16;
-        base = value - offset;
         p->val.s.value = value;
-        p->val.s.base = base;
-        p->val.s.offset = offset;
         p->val.s.attrs.code = isCode ? 1 : 0;
         p->val.s.attrs.entry = isEntry ? 1 : 0;
         p->val.s.attrs.external = isExternal ? 1 : 0;
         p->val.s.attrs.data = isData ? 1 : 0;
+        p->val.s.attrs.definition = isDefinition ? 1 : 0;
     }
 
     return True;
@@ -187,13 +186,7 @@ Bool updateSymbol(Item *p, unsigned value, unsigned isCode, unsigned isData, uns
 
         if (value)
         {
-            unsigned base = 0;
-            unsigned offset = 0;
-            offset = value % 16;
-            base = value - offset;
             p->val.s.value = value;
-            p->val.s.base = base;
-            p->val.s.offset = offset;
         }
 
         if (isEntry)
@@ -212,22 +205,13 @@ Item *getSymbol(char *name)
     return lookup(name, Symbol);
 }
 
-int getSymbolBaseAddress(char *name)
+int getSymbolAddress(char *name)
 {
     Item *p = lookup(name, Symbol);
     if (p == NULL)
         return -1;
 
-    return p->val.s.base;
-}
-
-int getSymbolOffset(char *name)
-{
-    Item *p = lookup(name, Symbol);
-    if (p == NULL)
-        return -1;
-
-    return p->val.s.offset;
+    return p->val.s.value;
 }
 
 Bool isSymbolExist(char *name)
@@ -298,20 +282,14 @@ Bool isLabelNameAlreadyTaken(char *name, ItemType type)
 Item *updateSymbolAddressValue(char *name, int newValue)
 {
     Item *p = getSymbol(name);
-    unsigned base;
-    unsigned offset;
 
     if (p != NULL)
     {
-        offset = newValue % 16;
-        base = newValue - offset;
-        p->val.s.offset = offset;
-        p->val.s.base = base;
         p->val.s.value = newValue;
     }
-    else
+    else {
         yieldError(symbolDoesNotExist);
-
+    }
     return p;
 }
 
@@ -375,12 +353,7 @@ void updateFinalValueOfSingleItem(Item *item)
 
     if (item->val.s.attrs.data)
     {
-        unsigned base = 0, offset = 0, newValue = item->val.s.value + getICF();
-        offset = newValue % 16;
-        base = newValue - offset;
-        item->val.s.offset = offset;
-        item->val.s.base = base;
-        item->val.s.value = newValue;
+        item->val.s.value = item->val.s.value + getICF();
     }
 
     if (item->next != NULL)
@@ -402,19 +375,18 @@ void writeExternalsToFile(FILE *fp)
     ExtListItem *p = extListHead;
     while (p != NULL)
     {
-        if (p->value.base)
-            writeSingleExternal(fp, p->name, p->value.base, p->value.offset, p->value.next);
+        if (p->value.address)
+            writeSingleExternal(fp, p->name, p->value.address, p->value.next);
         p = p->next;
     }
 }
 
-void writeSingleExternal(FILE *fp, char *name, unsigned base, unsigned offset, ExtPositionData *next)
+void writeSingleExternal(FILE *fp, char *name, unsigned address, ExtPositionData *next)
 {
 
-    fprintf(fp, "%s BASE %u\n", name, base);
-    fprintf(fp, "%s OFFSET %u\n", name, offset);
+    fprintf(fp, "%s BASE %u\n", name, address);
     if (next != NULL)
-        writeSingleExternal(fp, name, next->base, next->offset, next->next);
+        writeSingleExternal(fp, name, next->address, next->next);
 }
 
 void writeEntriesToFile(FILE *fp)
@@ -433,7 +405,7 @@ int writeSingleEntry(Item *item, FILE *fp, int count)
 {
     if (item->val.s.attrs.entry)
     {
-        fprintf(fp, "%s,%d,%d\n", item->name, item->val.s.base, item->val.s.offset);
+        fprintf(fp, "%s,%d\n", item->name, item->val.s.value);
         count++;
     }
     if (item->next != NULL)
@@ -518,8 +490,8 @@ void printSymbolTable()
 {
     int i = 0;
 
-    printf("\n\t\t ~ SYMBOL TABLE ~ \n");
-    printf("name\t\tvalue\t\tattributes");
+    printf("\n\t ~ SYMBOL TABLE ~ \n");
+    printf("name\tvalue\tattributes");
 
     while (i < HASHSIZE)
     {
@@ -532,39 +504,41 @@ void printSymbolTable()
 
 int printSymbolItem(Item *item)
 {
-    /*  printf("line 94, inside printSymbolItem \n");
-     */
-
-    printf("\n%s\t%u\t%u\t%u\t", item->name, item->val.s.value, item->val.s.base, item->val.s.offset);
-    if (!item->val.s.attrs.code && !item->val.s.attrs.data && !item->val.s.attrs.entry && !item->val.s.attrs.external)
-        printf("   ");
+    printf("\n%s\t%u\t", item->name, item->val.s.value);
+    if (!item->val.s.attrs.code && !item->val.s.attrs.data && !item->val.s.attrs.entry && !item->val.s.attrs.external && !item->val.s.attrs.definition)
+        printf("\t");
 
     else
     {
-        if ((item->val.s.attrs.code || item->val.s.attrs.data) && (item->val.s.attrs.entry || item->val.s.attrs.external))
-        {
-            if (item->val.s.attrs.code)
-                printf("code,");
-            else
-                printf("data,");
+        if (item->val.s.attrs.definition) {
+            printf("definition");
+        } else {
 
-            if (item->val.s.attrs.entry)
-                printf("entry");
+            if ((item->val.s.attrs.code || item->val.s.attrs.data) && (item->val.s.attrs.entry || item->val.s.attrs.external))
+            {
+                if (item->val.s.attrs.code)
+                    printf("code,");
+                else
+                    printf("data,");
+
+                if (item->val.s.attrs.entry)
+                    printf("entry");
+                else
+                    printf("external");
+            }
             else
-                printf("external");
+            {
+                if (item->val.s.attrs.code)
+                    printf("code");
+                else if (item->val.s.attrs.data)
+                    printf("data");
+                else if (item->val.s.attrs.entry)
+                    printf("entry");
+                else
+                    printf("external");
+            }
         }
-        else
-        {
-            if (item->val.s.attrs.code)
-                printf("code");
-            else if (item->val.s.attrs.data)
-                printf("data");
-            else if (item->val.s.attrs.entry)
-                printf("entry");
-            else
-                printf("external");
-        }
-    }
+    }   
 
     if (item->next != NULL)
         printSymbolItem(item->next);

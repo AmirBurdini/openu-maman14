@@ -152,28 +152,23 @@ Bool verifyStringArguments(char *line)
 Bool verifyDefinitionArguments(char *line) {
 
     Bool isValid = True;
-    int size = 0, n = 0, num = 0;
+    int n = 0, num = 0;
     char c = 0;
     char args[MAX_LINE_LEN + 1] = {0}, *p;
     line = strstr(line, DEFINE) + strlen(DEFINE);
 
     strcpy(args, line);
 
-    p = strtok(line, "=");
-
-    size = strlen(p);
-    increaseDataCounter(size);
-
-    p = strtok(NULL, _TOKEN_FORMAT_SECOND);
-    sscanf(p, "%d%n%c", &num, &n, &c);
-        if (c == '.' && n > 0)
-            isValid = yieldError(wrongArgumentTypeNotAnInteger);
-        num = atoi(p);
-        if (!num && *p != '0')
-            isValid = yieldError(expectedNumber);
+    p = strtok(line, _TOKEN_FORMAT_DEFINE);
+    p = strtok(NULL, _TOKEN_FORMAT_DEFINE);
+    
+    sscanf(p, "%d", &num);
+    num = atoi(p);
+    if (!num && *p != '0')
+        isValid = yieldError(wrongArgumentTypeNotAnInteger);
 
     if (isValid)
-        increaseDataCounter(size);
+        increaseDataCounter(1);
 
     return isValid;
 }
@@ -260,8 +255,9 @@ Bool parseLine(char *token, char *line)
     }
 
     else if (isDefinition(token)) {
-
-        /* add support for .define */
+        
+        char *next = strtok(NULL, _TOKEN_FORMAT_DEFINE);
+        return handleDefinition(next, line) && isValid;
     }
 
     else

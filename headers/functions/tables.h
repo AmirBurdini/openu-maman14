@@ -59,11 +59,10 @@ void freeTableItem(Item *item); */
 /*#####################################################################*/
 /*#####################################################################*/
 
-Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal);
+Bool addSymbol(char *name, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal, unsigned isDefinition);
 Bool updateSymbol(Item *p, unsigned value, unsigned isCode, unsigned isData, unsigned isEntry, unsigned isExternal);
 Item *getSymbol(char *name);
-int getSymbolBaseAddress(char *name);
-int getSymbolOffset(char *name);
+int getSymbolAddress(char *name);
 Bool isSymbolExist(char *name);
 Bool isExternal(char *name);
 Bool isEntry(char *name);
@@ -103,4 +102,4 @@ void resetExtList();
 void updateExtPositionData(char *name);
 void addExtListItem(char *name);
 void writeExternalsToFile(FILE *fp);
-void writeSingleExternal(FILE *fp, char *name, unsigned base, unsigned offset, ExtPositionData *next);
+void writeSingleExternal(FILE *fp, char *name, unsigned address, ExtPositionData *next);

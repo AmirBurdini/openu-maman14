@@ -67,8 +67,7 @@ typedef struct
 /* ExtPositionData is the nested singly linked list element in the ExtListItem that we just mentioned above.*/
 typedef struct ExtPositionData
 {
-    unsigned base;
-    unsigned offset;
+    unsigned address;
     struct ExtPositionData *next;
 } ExtPositionData;
 
@@ -91,6 +90,8 @@ typedef struct
     unsigned int data : 1;
     unsigned int entry : 1;
     unsigned int external : 1;
+    unsigned int definition : 1;
+
 } Attributes;
 
 /*SymbolData is a struct that holds the additional unique data fields in the symbols hash table.
@@ -102,8 +103,6 @@ typedef struct
 typedef struct
 {
     unsigned value;
-    unsigned base;
-    unsigned offset;
     Attributes attrs;
 } SymbolData;
 

@@ -76,3 +76,5 @@ Bool handleLabel(char *labelName, char *nextToken, char *line);
      The function keeps on validating the whole line and reports all of the errors.
     The function returns true if the line is valid, andfalse if it ian't.
 */
+
+Bool handleDefinition(char *name, char *line);

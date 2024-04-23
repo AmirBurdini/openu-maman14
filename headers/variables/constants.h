@@ -43,3 +43,5 @@
 
 #define _TOKEN_FORMAT " \t\n\f\r"
 #define _TOKEN_FORMAT_SECOND ", \t\n\f\r"
+#define _TOKEN_FORMAT_DEFINE "= \t\n\f\r"
+

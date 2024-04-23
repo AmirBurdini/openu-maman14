@@ -137,6 +137,4 @@ Bool verifyLabelNamingAndPrintErrors(char *s);
 
 Bool isDefinition(char *s);
 
-Bool isDefinitionStrict(char *s);
-
 AddressMethod convertBinaryToAddressMethod(AddressMethodsEncoding method);

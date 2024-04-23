@@ -278,11 +278,5 @@ Bool verifyLabelNamingAndPrintErrors(char *s)
 /* definition */
 
 Bool isDefinition(char *s) {
-
-    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
-}
-
-Bool isDefinitionStrict(char *s) {
-
-    return (strchr(s, '=') != NULL) && (strstr(s, DEFINE) != NULL) ? True : False;
+    return (strstr(s, DEFINE) != NULL) ? True : False;
 }

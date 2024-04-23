@@ -157,9 +157,9 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
                 else
                 {
                     if (type == _TYPE_ENTRY)
-                        return addSymbol(labelName, 0, 0, 0, 1, 0) ? True : False;
+                        return addSymbol(labelName, 0, 0, 0, 1, 0, 0) ? True : False;
                     if (type == _TYPE_EXTERNAL)
-                        return addSymbol(labelName, 0, 0, 0, 0, 1) ? True : False;
+                        return addSymbol(labelName, 0, 0, 0, 0, 1, 0) ? True : False;
                 }
 
                 free(labelName);
@@ -171,7 +171,7 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
             }
         }
     }
-    else if (isLabelDeclaration(firstToken) || isDefinition(firstToken))
+    else if (isLabelDeclaration(firstToken))
     {
         int dataCounter = getDC();
         Bool isLabelNameAvailable;
@@ -181,11 +181,10 @@ Bool handleInstruction(int type, char *firstToken, char *nextTokens, char *line)
             yieldError(illegalSymbolNameAlreadyInUse);
 
         if (((type == _TYPE_DATA && verifyDataArguments(line)) || 
-            (type == _TYPE_STRING && verifyStringArguments(line)) || 
-            (type == _TYPE_DEFINE && verifyDefinitionArguments(line))) && isLabelNameAvailable)
+            (type == _TYPE_STRING && verifyStringArguments(line))) && isLabelNameAvailable)
 
         {
-            return addSymbol(firstToken, dataCounter, 0, 1, 0, 0) ? True : False;
+            return addSymbol(firstToken, dataCounter, 0, 1, 0, 0, 0) ? True : False;
         } else
             return False;
     } else
@@ -227,7 +226,7 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
         int offset = (int)(strlen(labelName) + strlen(nextToken) + 1);
         strcpy(args, &line[offset]);
         if (handleOperation(nextToken, args))
-            return addSymbol(labelName, icAddress, 1, 0, 0, 0) ? True : False;
+            return addSymbol(labelName, icAddress, 1, 0, 0, 0, 0) ? True : False;
         else
             return False;
     } 
@@ -235,4 +234,20 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
         yieldError(illegalLabelUseExpectedOperationOrInstruction);
     }
     return False;
+}
+
+
+Bool handleDefinition(char *name, char *line)
+{
+    Bool isValid = True;
+    int dcAddress;
+    if (!name || !line)
+        return False;
+    if (!verifyDefinitionArguments(line))
+    {
+        yieldError(illegalLabelUseExpectedOperationOrInstruction);
+        return False;
+    }
+    dcAddress = getDC();
+    return addSymbol(name, dcAddress, 0, 0, 0, 0, 1) ? True : False;
 }
