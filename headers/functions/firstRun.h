@@ -77,4 +77,4 @@ Bool handleLabel(char *labelName, char *nextToken, char *line);
     The function returns true if the line is valid, andfalse if it ian't.
 */
 
-Bool handleDefinition(char *name, char *line);
+Bool handleDefinition(char *name, char *value, char *line);
