@@ -237,17 +237,19 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
 }
 
 
-Bool handleDefinition(char *name, char *line)
+Bool handleDefinition(char *name, char *value, char *line)
 {
     Bool isValid = True;
-    int dcAddress;
-    if (!name || !line)
+    int definitionValue;
+    if (!name || !value || !line)
         return False;
+
     if (!verifyDefinitionArguments(line))
     {
         yieldError(illegalLabelUseExpectedOperationOrInstruction);
         return False;
     }
-    dcAddress = getDC();
-    return addSymbol(name, dcAddress, 0, 0, 0, 0, 1) ? True : False;
+    
+    definitionValue = atoi(value);
+    return addSymbol(name, definitionValue, 0, 0, 0, 0, 1) ? True : False;
 }

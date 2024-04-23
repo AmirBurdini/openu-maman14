@@ -257,7 +257,10 @@ Bool parseLine(char *token, char *line)
     else if (isDefinition(token)) {
         
         char *next = strtok(NULL, _TOKEN_FORMAT_DEFINE);
-        return handleDefinition(next, line) && isValid;
+
+        if ((*currentCompilerState)() == firstRun) {
+            return handleDefinition(next, line) && isValid;
+        } 
     }
 
     else
