@@ -11,9 +11,7 @@ if there are any external labels.*/
 void exportFilesMainHandler()
 {
     printf("Code ingested successfully, exporting files.\n");
-    /*
     generateObFile();
-    */
     if (areEntriesExist())
         createEntriesFile();
     if (areExternalsExist())
