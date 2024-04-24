@@ -405,7 +405,7 @@ int writeSingleEntry(Item *item, FILE *fp, int count)
 {
     if (item->val.s.attrs.entry)
     {
-        fprintf(fp, "%s,%d\n", item->name, item->val.s.value);
+        fprintf(fp, "%s %d\n", item->name, item->val.s.value);
         count++;
     }
     if (item->next != NULL)
