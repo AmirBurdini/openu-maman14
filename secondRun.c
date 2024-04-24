@@ -104,9 +104,6 @@ void writeDirectOperandWord(char *labelName)
 {
     Item *item = getSymbol(labelName);
 
-    printf("im trying to writeDirectOperandWord : %s\n", labelName);
-
-
     if (item == NULL) {
         /*yieldError*/
     }
@@ -131,8 +128,6 @@ void writeIndexOperandWord(char *value)
     Item *offsetAddress;
     unsigned result;
     
-    printf("im trying to writeIndexOperandWord : %s\n", value);
-
     if (arrAddres == NULL) {
         /*yieldError*/
     }
