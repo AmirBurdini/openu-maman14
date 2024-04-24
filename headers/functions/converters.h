@@ -33,4 +33,8 @@ char *trimFromLeft(char *s);
 
 char *numToBin(int num);
 
-char *decimalToBase4(int number);
+char *binaryWordToBase4(BinaryWord *word);
+
+int binaryWordToDecimal(BinaryWord *word);
+
+char base4ToSign(int digit);

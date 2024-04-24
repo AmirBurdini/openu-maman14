@@ -7,7 +7,6 @@ unsigned static ICF = 0;
 unsigned static DCF = 0;
 
 extern char *numToBin(int num);
-
 unsigned getDC() { return DC; }
 unsigned getIC() { return IC; }
 unsigned getICF() { return ICF; }
@@ -88,11 +87,12 @@ void calcFinalAddrsCountersValues()
 void writeMemoryImageToObFile(FILE *fp)
 {
     extern BinaryWord *binaryImg;
-    int i;
+    int i, j;
+    char *encoded;
     int totalSize = DCF - MEMORY_START;
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
     for (i = 0; i < totalSize; i++)
     {
-        fprintf(fp, "%04d \t %u \n", MEMORY_START + i, &binaryImg[i]);
+        fprintf(fp, "%04d \t %s \n", MEMORY_START + i, binaryWordToBase4(&binaryImg[i]));
     }
 }

@@ -12,4 +12,3 @@
 #include "firstRun.h"
 #include "secondRun.h"
 #include "exportFiles.h"
-#include "encode.h"
