@@ -1,71 +1,67 @@
 
 /*
 ##########################################################################################################
-##########################################################################################################
-#################################### preProccesor.c/h General Overview: ##################################
-##########################################################################################################
+############################################## preProccesor.c ############################################
 ##########################################################################################################
 
-This file purpose is to be the main file that is responsible for parsing of the expanded assembly code.
-while parsing the code in this file we are invoking different functions that exists in the firstRun.c
-and the secondRun.c depending on the global state of our assembler (firstRun/SecondRun).
+This file serves as the primary module responsible for parsing the expanded assembly code. 
+It orchestrates the parsing process by invoking various functions from "firstRun.c" and "secondRun.c" 
+based on the current state of the assembler(whether it's in the first run or the second run).
 
-##########################################################################################################
-##########################################################################################################
 ##########################################################################################################
 */
 
-/* @ Function: verifyCommaSyntax
-   @ Arguments: char * which will hold the content of some line of code.
-   @ Description:The function validates the comma syntax in some line of code,
-   it checks that between any 2 arguments their exist only one comma and that
-   there are not commas in the end or the beginning of the line. If a line
-   found to be violating these comma syntax rules, it yields the relevant error
-   message.
+/* @ Function: Bool verifyCommaSyntax(char *line)
+   @ Arguments: char *line - which will contain the content of a specific line of code.
+   @ Description:The function validates the comma syntax in a line of code. 
+   It ensures that between any two arguments, there exists only one comma, and there are no commas at the beginning or end of the line. 
+   If a line is found to violate these comma syntax rules, it yields the relevant error message.
 */
-
 Bool verifyCommaSyntax(char *line);
 
-/* @ Function: verifyDataArguments
+/* @ Function: Bool verifyDataArguments(char *line)
    @ Arguments: char *line - the operation's name.
-   @ Description: checks if the operation name is valid.
-   @ Returns: returns true if the operation name is valid, false otherwise.
+   @ Description: The function checks whether the operation name is valid and returns true if it is, 
+   otherwise it returns false.
 */
-
 Bool verifyDataArguments(char *line);
 
-/* @ Function: verifyStringArguments
-   @ Arguments: the function gets char * token which is the current token that we are about to parse the string argument from.
-   @ Description: The function extracts the argument string of the .string instruction, than the function analyses\ parses the string.
-   If the function encounter errors- no opening or closing  (or no opening and closing) quotes, it yields (prints) the relevant error message and keeps on parsing the rest of the line in order to find and report all the errors.
-   While the function parsing the arguments, ir also counts the length of the .string string (including the \0 at the end) that will take size in the data memory.
-   In the end of the function, if after parsing the line turns out to be valid, it increases the data counter with the size in memory that the current .string instruction will take.
+/* @ Function: Bool verifyStringArguments(char *line)
+   @ Arguments: char *line - token which is the current token that we are about to parse the string argument from.
+   @ Description: The function extracts and analyzes the argument string of the .string instruction. 
+   It checks for errors such as missing opening or closing quotes, and continues parsing to report all errors. 
+   It also counts the length of the string (including the \0 at the end) for memory size calculation. 
+   If the line is valid, it increases the data counter by the size in memory that the .string instruction will occupy.
 */
 Bool verifyStringArguments(char *line);
 
-/* @ Function: parseLine
-   @ Arguments: The function gets char * token which is the first token of the line that we are about to parse and char *line which is the current line being parsed
-   @ Description: The function checks what is the current currentCompilerState, than checks what is the first token (an instruction, an operation, a label declaration...)
-    If the currentCompilerState is equal to firstRun, according to the first token, it finds out what kind of line is the current line and calls other function so they can handle the line.
-    If the currentCompilerState is equal to secondRun, according to the first token, it calls function to write the compiled memory.
-    If it finds some errors, it yields (prints) the relevant error message.
-    If the line turns out to be valid, it returns true, else it returns false.
+/* @ Function: Bool parseLine(char *token, char *line)
+   @ Arguments: char *token, char *line - which is the first token of the line that we are about to parse and char *line which is the current line being parsed
+   @ Description: The function examines the currentCompilerState and the first token of the line. 
+   If in the firstRun state, it determines the type of line and delegates handling to other functions. 
+   In the secondRun state, it calls functions to write the compiled memory. 
+   It prints relevant error messages if errors are found. 
+   If the line is valid, it returns true; otherwise, it returns false..
 */
 Bool parseLine(char *token, char *line);
 
-/* @ Function:handleSingleLine
-   @ Arguments: This function gets char *line which is the current line that is being parsed.
-   @ Description: The function checks what is the current currentCompilerState, and by that decides how to split the line into tokens (what is the delimeter). 
-   Than the function calls the function parseLine in order to check if there are errors in the line.
-   Than its increases by 1 the number of line it parses (for the next line to come).
-   Returns true if the line is valid and false if it isn't.
+/* @ Function: Bool handleSingleLine(char *line)
+   @ Arguments: char *line -  which is the current line that is being parsed.
+   @ Description: The function determines the currentCompilerState and uses that information to decide how to split the line into tokens, selecting the appropriate delimiter. 
+   Then, it calls the parseLine function to check for errors in the line. 
+   After parsing, it increments the line number by 1 for the next line. 
+   Finally, it returns true if the line is valid and false if it isn't.
 */
 Bool handleSingleLine(char *line);
 
+/* @ Function: Bool verifyDefinitionArguments(char *line);
+   @ Arguments: char *line - which is line that we want to verify if define is correct.
+   @ Description: The function checks whether the defined syntax is valid.
+*/
 Bool verifyDefinitionArguments(char *line);
 
-/* @ Function:parseAssemblyCode
-   @ Arguments: The function gets FILE *src which is a file after the pre proccesoring.
-   @ Description: The function parses the file, splits it to tokens and calls the right functions to complete the first and second run.
+/* @ Function: void parseAssemblyCode(FILE *src)
+   @ Arguments: FILE *src - which is a file after the pre proccesoring.
+   @ Description: The function parses the file, dividing it into tokens, and invokes the appropriate functions to complete both the first and second runs.
 */
 void parseAssemblyCode(FILE *src);
