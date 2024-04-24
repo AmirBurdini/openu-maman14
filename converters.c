@@ -113,12 +113,12 @@ char *binaryWordToBase4(BinaryWord *word) {
     char *result = (char *)malloc(8 * sizeof(char));
 
     temp = abs(number);
-    i = 6;
+    i = 0;
     while (temp > 0) {
         remainder = temp % 4;
         result[i] = base4ToSign(remainder);
         temp = temp / 4;
-        i--;
+        i++;
     }
 
     result[7] = '\0';
