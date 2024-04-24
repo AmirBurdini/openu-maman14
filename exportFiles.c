@@ -10,8 +10,10 @@ if there are any external labels.*/
 
 void exportFilesMainHandler()
 {
-    printf("Finished Successfully, about to export files!\n");
+    printf("Code ingested successfully, exporting files.\n");
+    /*
     generateObFile();
+    */
     if (areEntriesExist())
         createEntriesFile();
     if (areExternalsExist())

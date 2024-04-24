@@ -511,7 +511,7 @@ int printSymbolItem(Item *item)
     else
     {
         if (item->val.s.attrs.definition) {
-            printf("definition");
+            printf("mdefine");
         } else {
 
             if ((item->val.s.attrs.code || item->val.s.attrs.data) && (item->val.s.attrs.entry || item->val.s.attrs.external))
