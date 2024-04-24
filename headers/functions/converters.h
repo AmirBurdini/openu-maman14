@@ -31,6 +31,16 @@ char *cloneString(char *s);
 */
 char *trimFromLeft(char *s);
 
+/* @ Function: char *numToBin(char *s)
+   @ Arguments: The function gets int num - The number we get converts to binary number.
+   @ Description: The function gets a int num, 
+   that representred in decimal and we convert it to binary.
+*/
 char *numToBin(int num);
 
+/* @ Function: char *decimalToBase4(int number)
+   @ Arguments: The function gets int num - The number we get converted to base 4 number.
+   @ Description: The function gets a int num, 
+   that representred in decimal and we convert it to base4 number.
+*/
 char *decimalToBase4(int number);
