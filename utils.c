@@ -73,6 +73,7 @@ Bool isValidIndexParameter(char *s)
 {
     int len = strlen(s);
     const char *i;
+    char *definition;
     char *opening = strchr(s, '[');
     char *closing = strchr(s, ']');
     if (opening == NULL || closing == NULL)
@@ -81,7 +82,10 @@ Bool isValidIndexParameter(char *s)
         return False;
 
     /* handle definitions */
-    if (isLabelNameAlreadyTaken(opening + 1, Symbol)) {
+    definition = opening + 1;
+    definition[closing - opening - 1] = '\0';
+
+    if (isLabelNameAlreadyTaken(definition, Symbol)) {
         return True;
     }
 

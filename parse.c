@@ -22,6 +22,8 @@ Bool verifyDataArguments(char *line)
     while (p != NULL)
     {
         sscanf(p, "%d%n%c", &num, &n, &c);
+        if()
+
         if (c == '.' && n > 0)
             isValid = yieldError(wrongArgumentTypeNotAnInteger);
         num = atoi(p);

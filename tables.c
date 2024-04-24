@@ -90,7 +90,7 @@ unsigned hash(char *s)
 }
 
 Item *lookup(char *s, ItemType type)
-{
+{   
     Item *np;
     int i = hash(s);
     for (np = (type == Symbol ? symbols[i] : macros[i]); np != NULL; np = np->next)
@@ -254,9 +254,9 @@ Bool isNonEmptyEntry(char *name)
 }
 
 Bool isLabelNameAlreadyTaken(char *name, ItemType type)
-{
+{   
     Item *p = lookup(name, type);
-
+    
     if (name[strlen(name) - 1] == ':')
         name[strlen(name) - 1] = '\0';
 
@@ -264,7 +264,7 @@ Bool isLabelNameAlreadyTaken(char *name, ItemType type)
     {
         if (type == Symbol)
         {
-            if (p->val.s.attrs.data || p->val.s.attrs.code)
+            if (p->val.s.attrs.data || p->val.s.attrs.code || p->val.s.attrs.definition)
                 return True;
             if (p->val.s.attrs.entry)
                 return (!p->val.s.attrs.data && !p->val.s.attrs.code && !p->val.s.attrs.external) ? False : True;
