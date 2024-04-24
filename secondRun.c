@@ -25,7 +25,6 @@ Bool writeOperationBinary(char *operationName, char *args)
         }
     }
 
-    printf("%d \n", wordCount);
     writeFirstWord(src, dest, active, op);
     if (wordCount > 9) {
         writeRegisterOperandWord(src, dest);
@@ -103,19 +102,21 @@ void writeFirstWord(char *first, char *second, AddressMethodsEncoding active[2],
 void writeDirectOperandWord(char *labelName)
 {
     Item *item = getSymbol(labelName);
-
+    unsigned address = 0;
     if (item == NULL) {
         /*yieldError*/
     }
     
     if (isExternal(labelName))
     {
-        addWord((E) | item->val.s.value, Code);
-        updateExtPositionData(labelName);
+        address = getIC();
+        addWord((E) | address, Code);
+        updateExtPositionData(labelName, address);
     }
     else
     {
-        addWord((R) | item->val.s.value, Code);
+        address = getSymbolAddress(labelName);
+        addWord((R) | address, Code);
     }
 }
 
@@ -124,35 +125,35 @@ void writeIndexOperandWord(char *value)
     char *offset = strchr(value, '[');
     char *labelName = strtok(value, " [");
 
-    Item *arrAddres = getSymbol(labelName);
+    Item *labelSymbol = getSymbol(labelName);
     Item *offsetAddress;
-    unsigned result;
+    unsigned valueAddress, arrAddress;
     
-    if (arrAddres == NULL) {
+    if (labelSymbol == NULL) {
         /*yieldError*/
     }
-
+    arrAddress = labelSymbol->val.s.value;
     if (!isValidIndexParameter(offset)) {
         /*yieldError*/
     }
 
     offsetAddress = getSymbol(value);
     if (offsetAddress != NULL) {
-        result = offsetAddress->val.s.value;
+        valueAddress = offsetAddress->val.s.value;
     } else {
-        result = atoi(value);
+        valueAddress = atoi(value);
     }
 
     if (isExternal(labelName))
     {
-        addWord((unsigned)(E) | arrAddres->val.s.value, Code);
-        addWord((unsigned)(E) | result, Code);
-        updateExtPositionData(labelName);
+        addWord((unsigned)(E) | arrAddress, Code);
+        addWord((unsigned)(E) | valueAddress, Code);
+        updateExtPositionData(labelName, arrAddress);
     }
     else
     {
-        addWord((unsigned)(R) | arrAddres->val.s.value, Code);
-        addWord((unsigned)(R) | result, Code);
+        addWord((unsigned)(R) | arrAddress, Code);
+        addWord((unsigned)(R) | valueAddress, Code);
     }
 }
 

@@ -8,9 +8,9 @@ void exportFilesMainHandler()
 {
     printf("Code ingested successfully, exporting files.\n");
     generateObFile();
-    if (areEntriesExist())
+    if (entriesExist())
         createEntriesFile();
-    if (areExternalsExist())
+    if (externalsExist())
         createExternalsFile();
 }
 
@@ -55,7 +55,8 @@ void createExternalsFile()
     strcat(fileName, ".ext");
     ext = fopen(fileName, "w+");
     if (ext != NULL)
-    {
+    {   
+        printf("about to writeExternalsToFile \n");
         writeExternalsToFile(ext);
         fclose(ext);
         free(fileName);

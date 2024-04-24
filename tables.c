@@ -12,7 +12,7 @@ void findAllExternals();
 void addExtListItem(char *name);
 void resetExtList();
 ExtListItem *findExtOpListItem(char *name);
-void updateExtPositionData(char *name);
+void updateExtPositionData(char *name, unsigned address);
 void freeTableItem(Item *item);
 void freeTablesMemory();
 
@@ -55,9 +55,19 @@ void resetExtList()
     extListHead = NULL;
 }
 
-void updateExtPositionData(char *name)
+void updateExtPositionData(char *name, unsigned address)
 {
     ExtListItem *np = findExtOpListItem(name);
+    ExtPositionData *newExt = (ExtPositionData *)malloc(sizeof(ExtPositionData));
+
+    if (np->value.address)
+    {
+        newExt->address = address;
+        newExt->next = np->value.next;
+        np->value.next = newExt;
+    } else {
+        newExt->address = address;
+    }
     externalCount++;
 }
 
@@ -351,19 +361,19 @@ void updateFinalValueOfSingleItem(Item *item)
 
     if (item->val.s.attrs.data)
     {
-        item->val.s.value = item->val.s.value + getICF();
+        item->val.s.value += getICF();
     }
 
     if (item->next != NULL)
         updateFinalValueOfSingleItem(item->next);
 }
 
-Bool areEntriesExist()
+Bool entriesExist()
 {
     return entriesCount > 0 ? True : False;
 }
 
-Bool areExternalsExist()
+Bool externalsExist()
 {
     return externalCount > 0 ? True : False;
 }
@@ -373,16 +383,15 @@ void writeExternalsToFile(FILE *fp)
     ExtListItem *p = extListHead;
     while (p != NULL)
     {
-        if (p->value.address)
-            writeSingleExternal(fp, p->name, p->value.address, p->value.next);
+        printf("external : %u\n", p->value.address);
+        writeSingleExternal(fp, p->name, p->value.address, p->value.next);
         p = p->next;
     }
 }
 
 void writeSingleExternal(FILE *fp, char *name, unsigned address, ExtPositionData *next)
 {
-
-    fprintf(fp, "%s BASE %u\n", name, address);
+    fprintf(fp, "%s : %u\n", name, address);
     if (next != NULL)
         writeSingleExternal(fp, name, next->address, next->next);
 }
