@@ -102,9 +102,7 @@ void writeDirectOperandWord(char *labelName)
     if (isExternal(labelName))
     {
         addWord((E), Code);
-        /*
         updateExtPositionData(labelName);
-        */
     }
 
     else

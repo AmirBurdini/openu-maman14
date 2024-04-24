@@ -152,8 +152,7 @@ Bool verifyStringArguments(char *line)
 Bool verifyDefinitionArguments(char *line) {
 
     Bool isValid = True;
-    int n = 0, num = 0;
-    char c = 0;
+    int num = 0;
     char args[MAX_LINE_LEN + 1] = {0}, *p;
     line = strstr(line, DEFINE) + strlen(DEFINE);
 

@@ -58,11 +58,9 @@ void writeMemoryImageToObFile(FILE *fp);
 */
 
 void calcFinalAddrsCountersValues();
-void printWordBinary(unsigned index);
 void addWordToCodeImage(char *s);
 void addWordToDataImage(char *s);
 void addWord(int value, DataType type);
-void printBinaryImg();
 
 unsigned getDC();
 unsigned getIC();

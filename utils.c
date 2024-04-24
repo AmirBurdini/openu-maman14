@@ -71,7 +71,8 @@ Bool isValidImmediateParamter(char *s)
 
 Bool isValidIndexParameter(char *s)
 {
-    int i, len = strlen(s);
+    int len = strlen(s);
+    const char *i;
     char *opening = strchr(s, '[');
     char *closing = strchr(s, ']');
     if (opening == NULL || closing == NULL)
@@ -84,9 +85,11 @@ Bool isValidIndexParameter(char *s)
         return True;
     }
 
-    for (i = opening + 1; opening < len - 1; i++)
-        if (!isdigit(&i))
+    for (i = opening + 1; i < closing; i++) {
+        if (!isdigit(*i)) {
             return False;
+        }
+    }
     return True;
 }
 

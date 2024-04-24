@@ -239,7 +239,6 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
 
 Bool handleDefinition(char *name, char *value, char *line)
 {
-    Bool isValid = True;
     int definitionValue;
     if (!name || !value || !line)
         return False;

@@ -49,17 +49,6 @@ void resetMemoryCounters()
     DCF = 0;
 }
 
-void printBinaryImg()
-{
-    int i;
-    int totalSize = DCF - MEMORY_START;
-    for (i = 0; i < totalSize; i++)
-    {
-        printf("%04d ", MEMORY_START + i);
-        printWordBinary(i);
-    }
-}
-
 void addWord(int value, DataType type)
 {
     if (type == Code)
@@ -88,19 +77,6 @@ void wordStringToWordObj(char *s, DataType type)
         binaryImg[index].digit[j].on = s[j] == '1' ? 1 : 0;
 }
 
-void printWordBinary(unsigned index)
-{
-    int j;
-    for (j = 0; j < BINARY_WORD_SIZE; j++)
-    {
-        if (j % 4 == 0)
-            printf(" ");
-        printf("%d", binaryImg[index].digit[j].on ? 1 : 0);
-    }
-
-    printf("\n");
-}
-
 void calcFinalAddrsCountersValues()
 {
     ICF = IC;
@@ -117,7 +93,6 @@ void writeMemoryImageToObFile(FILE *fp)
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
     for (i = 0; i < totalSize; i++)
     {
-        /* , (&binaryImg[i])*/
-        fprintf(fp, "%04d\n", MEMORY_START + i);
+        fprintf(fp, "%04d \t %u \n", MEMORY_START + i, &binaryImg[i]);
     }
 }
