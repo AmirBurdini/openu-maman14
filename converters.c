@@ -107,11 +107,10 @@ char *numToBin(int num)
 
 char *binaryWordToBase4(BinaryWord *word) {
 
-    int length = 0;
     int number = binaryWordToDecimal(word);
     int i, temp = abs(number);
     int remainder;
-    char result[8];
+    char *result = (char *)malloc(8 * sizeof(char));
 
     temp = abs(number);
     i = 6;

@@ -87,8 +87,7 @@ void calcFinalAddrsCountersValues()
 void writeMemoryImageToObFile(FILE *fp)
 {
     extern BinaryWord *binaryImg;
-    int i, j;
-    char *encoded;
+    int i;
     int totalSize = DCF - MEMORY_START;
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
     for (i = 0; i < totalSize; i++)
