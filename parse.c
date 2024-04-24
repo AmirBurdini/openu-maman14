@@ -228,7 +228,6 @@ Bool parseLine(char *token, char *line)
         }
         else if (next != NULL)
         {
-
             if ((*currentCompilerState)() == firstRun)
                 return handleInstruction(type, token, next, line) && isValid;
             else

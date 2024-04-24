@@ -49,15 +49,7 @@ Bool writeStringInstruction(char *s);
    The function returns true.
 */
 
-void writeSecondWord(char *first, char *second, AddressMethodsEncoding active[2], const Operation *op);
-/* @ Function: writeSecondWord
-   @ Arguments: The function gets char *first and char *second - the first and second operands of the operation- const Operation *op.
-   It also gets AddressMethodsEncoding active[2]- an array with the allowed addresing methods for the operands.
-   @ Description: The function builds and writes in the memory the second word of each operation and its parameters, it checks what is the addressing method of first and second, what is the funct of the operation.
-    The function doesn't return value.
-*/
-
-void writeFirstWord(const Operation *op);
+void writeFirstWord(char *first, char *second, AddressMethodsEncoding active[2], const Operation *op);
 /* @ Function: writeFirstWord
    @ Arguments: The function gets const Operation *op- the operation it writes uts first word.
    @ Description: The function writes in the memory the first word of the operation and its parameter by writing the opcode of the operation into the memory.
@@ -86,16 +78,6 @@ Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type
     Returns true if the operation is valid, and false if it isn't.
 */
 
-char *parseLabelNameFromIndexAddrOperand(char *s);
-/* @ Function: parseLabelNameFromIndexAddrOperand
-   @ Arguments: The function gets char *s, which is the operand from index addressing method it parses.
-   @ Description: The function parses out the label name from the char *s it gets.
-   Returns the label name from the token it got.
-*/
+void writeRegisterOperandWord(char *source, char *destination);
 
-int parseRegNumberFromIndexAddrOperand(char *s);
-/* @ Function: parseRegNumberFromIndexAddrOperand
-   @ Arguments: The function gets char *s, which is the operand from index addressing method it parses.
-   @ Description: The function parses out the register's number from the char *s it gets.
-   Returns the register's number from the token it got.
-*/
+void writeIndexOperandWord(char *value);

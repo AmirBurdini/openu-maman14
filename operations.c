@@ -19,19 +19,6 @@ static const Operation operations[OP_SIZE] = {
     {15, "hlt", {0, 0, 0, 0}, {0, 0, 0, 0}},
 };
 
-
-Bool isOperationName(char *s)
-{
-    return getOpIndex(s) != -1 ? True : False;
-}
-
-const Operation *getOperationByName(char *s)
-{
-    int i = getOpIndex(s);
-
-    return i != -1 ? &operations[i] : NULL;
-}
-
 int getOpIndex(char *s)
 {
     int i = 0;
@@ -42,4 +29,17 @@ int getOpIndex(char *s)
         i++;
     }
     return -1;
+}
+
+Bool isOperationName(char *s)
+{   
+    int res = getOpIndex(s);
+    return res != -1 ? True : False;
+}
+
+const Operation *getOperationByName(char *s)
+{
+    int i = getOpIndex(s);
+
+    return i != -1 ? &operations[i] : NULL;
 }

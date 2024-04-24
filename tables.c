@@ -57,14 +57,12 @@ void resetExtList()
 
 void updateExtPositionData(char *name)
 {
-    /* Amir remove all references to offset and base */
     ExtListItem *np = findExtOpListItem(name);
     externalCount++;
 }
 
 void addExtListItem(char *name)
 {
-
     ExtListItem *next;
     next = (ExtListItem *)calloc(1, sizeof(ExtListItem));
     strncpy(next->name, name, strlen(name));
