@@ -17,7 +17,6 @@
 
    Additionally, we save the macros in a dedicated table and replace them with the original code in the file.
    ##########################################################################################################
-   ##########################################################################################################
  */
 
 /* @ Function: Bool handleOperation(char *operationName, char *args)
