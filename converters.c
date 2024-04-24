@@ -1,5 +1,7 @@
 #include "data.h"
 
+extern 
+
 char *cloneString(char *s)
 {
     char *copy;
@@ -103,28 +105,48 @@ char *numToBin(int num)
     return word;
 }
 
-char *decimalToBase4(int number) {
+char *binaryWordToBase4(BinaryWord *word) {
 
     int length = 0;
-     /*  Allocate memory for the base-4 representation */
-    char* result = (char*)malloc((length) * sizeof(char));
-    int temp = abs(number);
+    int number = binaryWordToDecimal(word);
+    int i, temp = abs(number);
     int remainder;
-    int index;
-    while (temp > 0) {
-        length++;
-        temp /= 4;
-    }
+    char result[8];
 
-    /* Convert number to base-4 */ 
     temp = abs(number);
-    index = 0;
+    i = 6;
     while (temp > 0) {
         remainder = temp % 4;
-        result[index++] = (char)('0' + remainder);
-        temp /= 4;
+        result[i] = base4ToSign(remainder);
+        temp = temp / 4;
+        i--;
     }
 
-    result[index] = '\0';  
+    result[7] = '\0';
     return result;
+}
+
+int binaryWordToDecimal(BinaryWord *word) {
+
+    int i, number = 0, scale = 1;
+    for (i = 0; i < BINARY_WORD_SIZE; i++) {
+        number = word->digit[i].on ? number + scale : number;
+        scale = scale * 2;
+    }
+    return number;
+}
+
+char base4ToSign(int digit) {
+    switch (digit) {
+        case 0:
+            return '*';
+        case 1:
+            return '#';
+        case 2:
+            return '%';
+        case 3:
+            return '!';
+        default:
+            return '?'; /* Handle invalid digits*/
+    }
 }

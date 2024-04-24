@@ -44,3 +44,8 @@ char *numToBin(int num);
    that representred in decimal and we convert it to base4 number.
 */
 char *decimalToBase4(int number);
+char *binaryWordToBase4(BinaryWord *word);
+
+int binaryWordToDecimal(BinaryWord *word);
+
+char base4ToSign(int digit);
