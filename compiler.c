@@ -89,7 +89,6 @@ void handleSingleFile(char *arg)
          */
         if ((*currentCompilerState)() == firstRun)
         {
-
             rewind(target);
             parseAssemblyCode(target);
             /* if the first run ended with no errors, it moves on to the second run,

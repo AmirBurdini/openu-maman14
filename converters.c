@@ -1,7 +1,5 @@
 #include "data.h"
 
-extern 
-
 char *cloneString(char *s)
 {
     char *copy;
@@ -23,7 +21,7 @@ char *decimalToBinary(int num)
 {
     unsigned int remainder = 0;
     unsigned int absValue = num;
-    int index = BINARY_WORD_SIZE - 1;
+    int index = 0;
     char *word = (char *)malloc(BINARY_WORD_SIZE + 1);
     
     if (num < 0)
@@ -33,11 +31,11 @@ char *decimalToBinary(int num)
         absValue++;
     }
         
-    while (index > -1) {
+    while (index < BINARY_WORD_SIZE) {
         remainder = absValue % 2;
         absValue /= 2;
         word[index] = remainder == 1 ? '1' : '0';
-        index--;
+        index++;
     }
 
     strcat(word, "\0");
@@ -55,14 +53,15 @@ char *binaryWordToBase4(BinaryWord *word) {
         for (i = 0; i < 8; i++){
             result[i] = '*';
         }
-    }
-    temp = abs(number);
-    i = 6;
-    while (temp > 0) {
-        remainder = temp % 4;
-        result[i] = base4ToSign(remainder);
-        temp = temp / 4;
-        i--;
+    } else {
+        temp = abs(number);
+        i = 6;
+        while (temp > 0) {
+            remainder = temp % 4;
+            result[i] = base4ToSign(remainder);
+            temp = temp / 4;
+            i--;
+        }
     }
 
     result[7] = '\0';
@@ -72,8 +71,8 @@ char *binaryWordToBase4(BinaryWord *word) {
 int binaryWordToDecimal(BinaryWord *word) {
 
     int i, number = 0, scale = 1;
-    for (i = 0; i < BINARY_WORD_SIZE; i++) {
-        number = word->digit[i].on ? number + scale : number;
+    for (i = BINARY_WORD_SIZE - 1; i >= 0; i--) {
+        number += word->digit[i].on ?scale : 0;
         scale = scale * 2;
     }
     return number;

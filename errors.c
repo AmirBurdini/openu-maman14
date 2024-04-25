@@ -123,7 +123,7 @@ void yieldErrorIntoFile(Error err)
         break;
 
     case IndexOperandParameterNoNumber:
-        fprintf(errorsFile, "illegal use of registery index operand addressing method\nRegistery Index addr method is allows to use only registeries\n that are between the r10 - r15!");
+        fprintf(errorsFile, "illegal use of registery index operand addressing method\nRegistery Index addr method is allows to use only registeries\n");
         break;
     case illegalInputPassedAsOperandSrcOperand:
         fprintf(errorsFile, "illegal operands input passed to source operand ");
@@ -247,7 +247,7 @@ void yieldErrorIntoFile(Error err)
         fprintf(errorsFile, "illegal Macro Name Use Of Saved Keywords");
         break;
     case wrongRegisteryReferenceUndefinedReg:
-        fprintf(errorsFile, "undefined registery, registeries names are r0 - r15");
+        fprintf(errorsFile, "undefined registery, registeries names are r0 - r7");
         break;
 
     case fileCouldNotBeOpened:
@@ -415,7 +415,7 @@ Bool yieldError(Error err)
         fprintf(stderr, "Macro declaration without defining macro name!");
         break;
     case IndexOperandParameterNoNumber:
-        fprintf(stderr, "illegal use of registery index operand addressing method\nRegistery Index addr method is allows to use only registeries\n that are between the r10 - r15!");
+        fprintf(stderr, "illegal use of registery index operand addressing method\nRegistery Index addr method is allows to use only registeries\n");
         break;
     case illegalInputPassedAsOperandSrcOperand:
         fprintf(stderr, "illegal operands input passed to source operand ");
@@ -542,7 +542,7 @@ Bool yieldError(Error err)
         fprintf(stderr, "illegal Macro Name Use Of Saved Keywords");
         break;
     case wrongRegisteryReferenceUndefinedReg:
-        fprintf(stderr, "undefined registery, registeries names are r0 - r15");
+        fprintf(stderr, "undefined registery, registeries names are r0 - r7");
         break;
 
     case fileCouldNotBeOpened:

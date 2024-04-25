@@ -72,8 +72,8 @@ void wordStringToWordObj(char *s, DataType type)
 {
     int j;
     int index = type == Code ? IC - MEMORY_START : DC - MEMORY_START;
-    printf("Address : %04d", index);
-    for (j = 0; j < BINARY_WORD_SIZE; j++) {
+    printf("%04d\t", index);
+    for (j = BINARY_WORD_SIZE; j >= 0; j--) {
         binaryImg[index].digit[j].on = s[j] == '1' ? 1 : 0;
         printf("%c", s[j]);
     }
@@ -90,7 +90,6 @@ void calcFinalAddrsCountersValues()
 
 void writeMemoryImageToObFile(FILE *fp)
 {
-    extern BinaryWord *binaryImg;
     int i;
     int totalSize = DCF - MEMORY_START;
     fprintf(fp, "%d %d\n", ICF - MEMORY_START, DCF - ICF);
