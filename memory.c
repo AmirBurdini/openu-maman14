@@ -6,7 +6,7 @@ unsigned static DC = 0;
 unsigned static ICF = 0;
 unsigned static DCF = 0;
 
-extern char *numToBin(int num);
+extern char *decimalToBinary(int num);
 unsigned getDC() { return DC; }
 unsigned getIC() { return IC; }
 unsigned getICF() { return ICF; }
@@ -53,7 +53,7 @@ void addWord(int value, DataType type)
     if (type == Code)
         addWordToCodeImage(decimalToBinary(value));
     else if (type == Data)
-        addWordToDataImage(numToBin(value));
+        addWordToDataImage(decimalToBinary(value));
 }
 
 void addWordToDataImage(char *s)

@@ -4,33 +4,43 @@ Bool writeOperationBinary(char *operationName, char *args)
 {
     const Operation *op = getOperationByName(operationName);
     char *src, *dest;
-    int wordCount = 0, regFlag = 0;
+    int wordCount = 0;
+    Bool desReg = False, srcReg = False;
     AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
     src = strtok(args, _TOKEN_FORMAT_SECOND);
     dest = strtok(NULL, _TOKEN_FORMAT_SECOND);
 
     if (src && (detectOperandType(src, active, 0)))
     {
-        wordCount++;
+        
         if (active[0].firstDigit && active[0].secondDigit) {
-            regFlag = 1;
-        }
+            srcReg=True;
+        }else wordCount++;
     }
 
     if (dest && (detectOperandType(dest, active, 1)))
     {   
-        wordCount++;
+        
         if (active[1].firstDigit && active[1].secondDigit) {
-            regFlag = 1;
-        }
+            desReg = True;
+        }else wordCount++;
     }
 
     writeFirstWord(src, dest, active, op);
-    if (regFlag) {
+    if (srcReg || desReg) {
         writeRegisterOperandWord(src, dest);
     }
-    if (wordCount == 1) {
+    if (wordCount ==1 && srcReg) {
+        writeAdditionalOperandsWords(op, active[1], dest);
+    }
+    if (wordCount ==1 && desReg) {
+         writeAdditionalOperandsWords(op, active[0], src);
+    }
+    
+    if (wordCount == 1 && !srcReg && !desReg) {
         dest = src;
+        src = NULL;
+        writeFirstWord(src, dest, active, op);
         writeAdditionalOperandsWords(op, active[1], dest);
     } else if (wordCount == 2){
         writeAdditionalOperandsWords(op, active[0], src);
@@ -171,8 +181,8 @@ void writeImmediateOperandWord(char *operand)
 
 void writeRegisterOperandWord(char *source, char *destination)
 {
-    int srcNumber = isRegistery(source) ? getRegisteryNumber(source) : 0;
-    int destNumber = isRegistery(destination) ?  getRegisteryNumber(destination) : 0;
+    int srcNumber = source != NULL ? getRegisteryNumber(source) : 0;
+    int destNumber = destination != NULL ?  getRegisteryNumber(destination) : 0;
 
     unsigned word = (srcNumber << 5) & (destNumber << 2);
 
@@ -200,6 +210,7 @@ Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type
                 return yieldError(entryDeclaredButNotDefined);
             active[type].firstDigit = 1;
             active[type].secondDigit = 0;
+            
         }
         else
             return yieldError(labelNotExist);
