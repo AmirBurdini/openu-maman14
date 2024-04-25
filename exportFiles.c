@@ -56,7 +56,6 @@ void createExternalsFile()
     ext = fopen(fileName, "w+");
     if (ext != NULL)
     {   
-        printf("about to writeExternalsToFile \n");
         writeExternalsToFile(ext);
         fclose(ext);
         free(fileName);

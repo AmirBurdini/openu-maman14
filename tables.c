@@ -62,11 +62,10 @@ void updateExtPositionData(char *name, unsigned address)
 
     if (np->value.address)
     {
-        newExt->address = address;
         newExt->next = np->value.next;
         np->value.next = newExt;
     } else {
-        newExt->address = address;
+        np->value.address = address;
     }
     externalCount++;
 }
@@ -223,7 +222,9 @@ int getSymbolAddress(char *name)
 }
 
 Bool isSymbolExist(char *name)
-{
+{   
+    Item *res = lookup(name, Symbol);
+    printSymbolItem(res);
     return lookup(name, Symbol) != NULL ? True : False;
 }
 
@@ -383,8 +384,9 @@ void writeExternalsToFile(FILE *fp)
     ExtListItem *p = extListHead;
     while (p != NULL)
     {
-        printf("external : %u\n", p->value.address);
-        writeSingleExternal(fp, p->name, p->value.address, p->value.next);
+        if (p->value.address) {
+            writeSingleExternal(fp, p->name, p->value.address, p->value.next);
+        }
         p = p->next;
     }
 }

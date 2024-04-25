@@ -9,6 +9,8 @@ Bool writeOperationBinary(char *operationName, char *args)
     src = strtok(args, _TOKEN_FORMAT_SECOND);
     dest = strtok(NULL, _TOKEN_FORMAT_SECOND);
 
+    printf("source : %s, dest : %s\n", src, dest);
+
     if (src && (detectOperandType(src, active, 0)))
     {
         wordCount++;
@@ -45,12 +47,10 @@ Bool writeOperationBinary(char *operationName, char *args)
 void writeAdditionalOperandsWords(const Operation *op, AddressMethodsEncoding active, char *value)
 {   
     AddressMethod method = convertBinaryToAddressMethod(active);
-
     if (method.index)
     {
         writeIndexOperandWord(value);
-    }
-    else if (method.direct)
+    } else if (method.direct) 
         writeDirectOperandWord(value);
     else if (method.immediate)
         writeImmediateOperandWord(value);
@@ -108,9 +108,10 @@ void writeDirectOperandWord(char *labelName)
     }
     
     if (isExternal(labelName))
-    {
+    {   
         address = getIC();
         addWord((E) | address, Code);
+        printf ("direct external : %s , %u \n", labelName, address);
         updateExtPositionData(labelName, address);
     }
     else
@@ -146,6 +147,7 @@ void writeIndexOperandWord(char *value)
 
     if (isExternal(labelName))
     {
+        printf ("index external : %s , %u , %u \n", labelName, arrAddress, valueAddress);
         addWord((unsigned)(E) | arrAddress, Code);
         addWord((unsigned)(E) | valueAddress, Code);
         updateExtPositionData(labelName, arrAddress);
@@ -195,6 +197,7 @@ Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type
         active[type].secondDigit = 1;
     } else
     {
+        /* solution might be here Amir*/
         if (isSymbolExist(operand))
         {
             if (isEntry(operand) && !isNonEmptyEntry(operand))
