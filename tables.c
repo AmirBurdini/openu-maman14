@@ -223,8 +223,6 @@ int getSymbolAddress(char *name)
 
 Bool isSymbolExist(char *name)
 {   
-    Item *res = lookup(name, Symbol);
-    printSymbolItem(res);
     return lookup(name, Symbol) != NULL ? True : False;
 }
 
@@ -488,7 +486,6 @@ void printMacroTable()
 
 int printMacroItem(Item *item)
 {
-
     printf("\n\t%s\t %5d\t%6d", item->name, item->val.m.start, item->val.m.end);
     if (item->next != NULL)
         printMacroItem(item->next);
