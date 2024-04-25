@@ -81,5 +81,5 @@ void addWord(int value, DataType type);
 
 unsigned getDC();
 unsigned getIC();
-unsigned getICF();
-unsigned getDCF();
+unsigned getICEnd();
+unsigned getDCEnd();

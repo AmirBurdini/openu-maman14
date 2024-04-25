@@ -51,7 +51,7 @@ void resetMemoryCounters()
 void addWord(int value, DataType type)
 {
     if (type == Code)
-        addWordToCodeImage(numToBin(value));
+        addWordToCodeImage(decimalToBinary(value));
     else if (type == Data)
         addWordToDataImage(numToBin(value));
 }

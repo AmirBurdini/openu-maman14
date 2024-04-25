@@ -40,7 +40,7 @@ Bool verifyDataArguments(char *line)
 }
 
 Bool verifyCommaSyntax(char *line)
-{
+{   
     int commasCounter = 0;
     Bool insideToken = False;
     Bool isFirstToken = True;
@@ -243,7 +243,7 @@ Bool parseLine(char *token, char *line)
     } else if (isOperationName(token))
     {
         char args[MAX_LINE_LEN] = {0};
-        strcpy(args, (line + strlen(token)));
+        strcpy(args, (line + strlen(token) + 1));
         return (*currentCompilerState)() == firstRun ? handleOperation(token, args) : writeOperationBinary(token, args);
     }
 

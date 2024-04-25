@@ -19,86 +19,25 @@ char *trimFromLeft(char *s)
     return s;
 }
 
-char *numToBin(int num)
+char *decimalToBinary(int num)
 {
-    int i = 0;
-    unsigned int result;
-    char *word, hex[5];
-    word = (char *)calloc(BINARY_WORD_SIZE + 1, sizeof(char *));
+    unsigned int remainder = 0;
+    unsigned int absValue = num;
+    int index = BINARY_WORD_SIZE - 1;
+    char *word = (char *)malloc(BINARY_WORD_SIZE + 1);
+    
     if (num < 0)
     {
-        result = abs(num);
-        result = ~result;
-        result++;
-        sprintf(hex, "%05x", (int)(result & 0x4ffff));
+        absValue = abs(num);
+        absValue = ~absValue;
+        absValue++;
     }
-    else
-        sprintf(hex, "%05x", (int)num & 0xfffff);
-
-    while (hex[i] != '\0')
-    {
-        switch (hex[i])
-        {
-
-        case '0':
-            strcat(word, "0000");
-            break;
-        case '1':
-            strcat(word, "0001");
-            break;
-        case '2':
-            strcat(word, "0010");
-            break;
-        case '3':
-            strcat(word, "0011");
-            break;
-        case '4':
-            strcat(word, "0100");
-            break;
-        case '5':
-            strcat(word, "0101");
-            break;
-        case '6':
-            strcat(word, "0110");
-            break;
-        case '7':
-            strcat(word, "0111");
-            break;
-        case '8':
-            strcat(word, "1000");
-            break;
-        case '9':
-            strcat(word, "1001");
-            break;
-        case 'A':
-        case 'a':
-            strcat(word, "1010");
-            break;
-        case 'B':
-        case 'b':
-            strcat(word, "1011");
-            break;
-        case 'C':
-        case 'c':
-            strcat(word, "1100");
-            break;
-        case 'D':
-        case 'd':
-            strcat(word, "1101");
-            break;
-        case 'E':
-        case 'e':
-            strcat(word, "1110");
-            break;
-        case 'F':
-        case 'f':
-            strcat(word, "1111");
-            break;
-        default:
-            break;
-        }
-
-        i++;
+        
+    while (index > -1) {
+        remainder = absValue % 2;
+        absValue /= 2;
+        word[index] = remainder == 1 ? '1' : '0';
+        index--;
     }
 
     strcat(word, "\0");
@@ -112,6 +51,11 @@ char *binaryWordToBase4(BinaryWord *word) {
     int remainder;
     char *result = (char *)malloc(8 * sizeof(char));
 
+    if (number == 0) {
+        for (i = 0; i < 8; i++){
+            result[i] = '*';
+        }
+    }
     temp = abs(number);
     i = 6;
     while (temp > 0) {
@@ -146,6 +90,7 @@ char base4ToSign(int digit) {
         case 3:
             return '!';
         default:
-            return '?'; /* Handle invalid digits*/
+            printf("unrecognised encoded number :%d\n", digit);
+            return '0'; /* Handle invalid digits*/
     }
 }

@@ -4,18 +4,16 @@ Bool writeOperationBinary(char *operationName, char *args)
 {
     const Operation *op = getOperationByName(operationName);
     char *src, *dest;
-    int wordCount = 0;
+    int wordCount = 0, regFlag = 0;
     AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
     src = strtok(args, _TOKEN_FORMAT_SECOND);
     dest = strtok(NULL, _TOKEN_FORMAT_SECOND);
-
-    printf("source : %s, dest : %s\n", src, dest);
 
     if (src && (detectOperandType(src, active, 0)))
     {
         wordCount++;
         if (active[0].firstDigit && active[0].secondDigit) {
-            wordCount = wordCount + 10;
+            regFlag = 1;
         }
     }
 
@@ -23,18 +21,16 @@ Bool writeOperationBinary(char *operationName, char *args)
     {   
         wordCount++;
         if (active[1].firstDigit && active[1].secondDigit) {
-            wordCount = wordCount + 10;
+            regFlag = 1;
         }
     }
 
     writeFirstWord(src, dest, active, op);
-    if (wordCount > 9) {
+    if (regFlag) {
         writeRegisterOperandWord(src, dest);
     }
     if (wordCount == 1) {
         dest = src;
-        src = NULL;
-        writeFirstWord(src, dest, active, op);
         writeAdditionalOperandsWords(op, active[1], dest);
     } else if (wordCount == 2){
         writeAdditionalOperandsWords(op, active[0], src);
@@ -175,8 +171,8 @@ void writeImmediateOperandWord(char *operand)
 
 void writeRegisterOperandWord(char *source, char *destination)
 {
-    int srcNumber = source != NULL ? getRegisteryNumber(source) : 0;
-    int destNumber = destination != NULL ?  getRegisteryNumber(destination) : 0;
+    int srcNumber = isRegistery(source) ? getRegisteryNumber(source) : 0;
+    int destNumber = isRegistery(destination) ?  getRegisteryNumber(destination) : 0;
 
     unsigned word = (srcNumber << 5) & (destNumber << 2);
 

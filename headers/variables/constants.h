@@ -7,7 +7,6 @@
 #define MAX_LABEL_LEN 31
 #define MAX_LINE_LEN 81
 
-/* Hash Table Hashsize (Result is currently 64)  */
 #define HASHSIZE ((RAM_MEMORY_SIZE / (MAX_LABEL_LEN + 1)) / 4)
 
 #define A 00
@@ -33,7 +32,6 @@
 #define EXTERNAL ".extern"
 #define DEFINE ".define"
 
-/* Given unique IDs */
 #define _TYPE_DATA 1001
 #define _TYPE_STRING 1002
 #define _TYPE_ENTRY 1003

@@ -11,7 +11,7 @@ Bool handleOperation(char *operationName, char *args)
 
     if (*args)
         areOperandsLegal = verifyCommaSyntax(args);
-
+   
     first = strtok(args, _TOKEN_FORMAT_SECOND);
     if (first)
     {
@@ -37,12 +37,12 @@ Bool handleOperation(char *operationName, char *args)
             size++;
         if (firstMethod.index || secondMethod.index)
             size += 2;
-        if (!firstMethod.immediate && !firstMethod.direct && !firstMethod.index && !firstMethod.reg && 
-            !secondMethod.immediate && !secondMethod.direct && !secondMethod.index && !secondMethod.reg)
-            size = 1;
+        if (firstMethod.reg || secondMethod.reg)
+            size++;
 
         active[0].firstDigit = active[0].secondDigit = 0;
         active[1].firstDigit = active[1].secondDigit = 0;
+        
         increaseInstructionCounter(size);
     }
 
@@ -223,7 +223,7 @@ Bool handleLabel(char *labelName, char *nextToken, char *line)
     {
         int icAddress = getIC();
         char args[MAX_LINE_LEN] = {0};
-        int offset = (int)(strlen(labelName) + strlen(nextToken) + 1);
+        int offset = (int)(strlen(labelName) + 1 + strlen(nextToken) + 1);
         strcpy(args, &line[offset]);
         if (handleOperation(nextToken, args))
             return addSymbol(labelName, icAddress, 1, 0, 0, 0, 0) ? True : False;
