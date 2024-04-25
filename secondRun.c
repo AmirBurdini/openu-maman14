@@ -110,14 +110,13 @@ void writeDirectOperandWord(char *labelName)
     Item *item = getSymbol(labelName);
     unsigned address = 0;
     if (item == NULL) {
-        /*yieldError*/
+        yieldError(symbolDoesNotExist);
     }
     
     if (isExternal(labelName))
     {   
         address = getIC();
         addWord((E) | address, Code);
-        printf ("direct external : %s , %u \n", labelName, address);
         updateExtPositionData(labelName, address);
     }
     else
@@ -129,31 +128,30 @@ void writeDirectOperandWord(char *labelName)
 
 void writeIndexOperandWord(char *value)
 {
-    char *offset = strchr(value, '[');
     char *labelName = strtok(value, " [");
+    char *offset = strtok(NULL, " [");
 
     Item *labelSymbol = getSymbol(labelName);
     Item *offsetAddress;
     unsigned valueAddress, arrAddress;
     
     if (labelSymbol == NULL) {
-        /*yieldError*/
+       yieldError(symbolDoesNotExist);
     }
     arrAddress = labelSymbol->val.s.value;
     if (!isValidIndexParameter(offset)) {
-        /*yieldError*/
+        /* yieldError*/
     }
 
-    offsetAddress = getSymbol(value);
+    offsetAddress = getSymbol(offset);
     if (offsetAddress != NULL) {
         valueAddress = offsetAddress->val.s.value;
     } else {
-        valueAddress = atoi(value);
+        valueAddress = atoi(offset);
     }
 
     if (isExternal(labelName))
     {
-        printf ("index external : %s , %u , %u \n", labelName, arrAddress, valueAddress);
         addWord((unsigned)(E) | arrAddress, Code);
         addWord((unsigned)(E) | valueAddress, Code);
         updateExtPositionData(labelName, arrAddress);
@@ -203,7 +201,6 @@ Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type
         active[type].secondDigit = 1;
     } else
     {
-        /* solution might be here Amir*/
         if (isSymbolExist(operand))
         {
             if (isEntry(operand) && !isNonEmptyEntry(operand))

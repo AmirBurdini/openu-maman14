@@ -1,4 +1,3 @@
-; file ps.am
 .entry LIST
 .extern W
 .define sz = 1
