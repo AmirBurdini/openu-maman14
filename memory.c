@@ -72,8 +72,12 @@ void wordStringToWordObj(char *s, DataType type)
 {
     int j;
     int index = type == Code ? IC - MEMORY_START : DC - MEMORY_START;
-    for (j = 0; j < BINARY_WORD_SIZE; j++)
+    printf("Address : %04d", index);
+    for (j = 0; j < BINARY_WORD_SIZE; j++) {
         binaryImg[index].digit[j].on = s[j] == '1' ? 1 : 0;
+        printf("%c", s[j]);
+    }
+     printf("\n");
 }
 
 void calcFinalAddrsCountersValues()
