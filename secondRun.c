@@ -5,33 +5,41 @@ Bool writeOperationBinary(char *operationName, char *args)
     const Operation *op = getOperationByName(operationName);
     char *src, *dest;
     int wordCount = 0;
+    Bool desReg = False, srcReg=False;
     AddressMethodsEncoding active[2] = {{0, 0}, {0, 0}};
     src = strtok(args, _TOKEN_FORMAT_SECOND);
     dest = strtok(NULL, _TOKEN_FORMAT_SECOND);
 
-    printf("source : %s, dest : %s\n", src, dest);
+    printf("AFTER STRTOK src: %s + dest: %s \n",src, dest);
 
     if (src && (detectOperandType(src, active, 0)))
     {
-        wordCount++;
+        
         if (active[0].firstDigit && active[0].secondDigit) {
-            wordCount = wordCount + 10;
-        }
+            srcReg=True;
+        }else wordCount++;
     }
 
     if (dest && (detectOperandType(dest, active, 1)))
     {   
-        wordCount++;
+        
         if (active[1].firstDigit && active[1].secondDigit) {
-            wordCount = wordCount + 10;
-        }
+            desReg = True;
+        }else wordCount++;
     }
 
     writeFirstWord(src, dest, active, op);
-    if (wordCount > 9) {
+    if (srcReg || desReg) {
         writeRegisterOperandWord(src, dest);
     }
-    if (wordCount == 1) {
+    if (wordCount ==1 && srcReg) {
+        writeAdditionalOperandsWords(op, active[1], dest);
+    }
+    if (wordCount ==1 && desReg) {
+         writeAdditionalOperandsWords(op, active[0], src);
+    }
+    
+    if (wordCount == 1 && !srcReg && !desReg) {
         dest = src;
         src = NULL;
         writeFirstWord(src, dest, active, op);
@@ -204,6 +212,7 @@ Bool detectOperandType(char *operand, AddressMethodsEncoding active[2], int type
                 return yieldError(entryDeclaredButNotDefined);
             active[type].firstDigit = 1;
             active[type].secondDigit = 0;
+            
         }
         else
             return yieldError(labelNotExist);
